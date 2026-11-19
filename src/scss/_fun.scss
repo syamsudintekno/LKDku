@@ -1,0 +1,101 @@
+// _fun.scss - Animasi & micro-interaction CSS untuk LKB-App
+
+:root {
+  --brand-700: #1f5f5b;
+  --brand-600: #277a74;
+  --brand-100: #e3f1ef;
+  --holiday: #e6e8ea;
+  --ok: #15803d;
+  --warn: #b45309;
+  --err: #b91c1c;
+  --info: #1d4ed8;
+}
+
+// Shake animation untuk login gagal atau validasi error
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.35s ease-in-out;
+}
+
+// Chip Unsur Tridharma
+.chip-unsur {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  line-height: 1;
+
+  &.pendidikan {
+    background-color: rgba(37, 99, 235, 0.12);
+    color: #1e40af;
+  }
+  &.penelitian {
+    background-color: rgba(124, 58, 237, 0.12);
+    color: #5b21b6;
+  }
+  &.pengabdian {
+    background-color: rgba(217, 119, 6, 0.12);
+    color: #92400e;
+  }
+  &.penunjang {
+    background-color: rgba(75, 85, 99, 0.12);
+    color: #374151;
+  }
+}
+
+// Badge Insidental
+.badge-insidental {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+}
+
+// Baris Libur Umum pada tabel
+.table-holiday-row {
+  background-color: var(--holiday) !important;
+  font-style: italic;
+  color: #4b5563;
+  text-align: center;
+}
+
+// Tombol FunButton hover & active
+.fun-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+}
+
+// Accessibility: Respect reduced motion
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
