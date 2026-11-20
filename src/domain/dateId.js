@@ -80,3 +80,18 @@ export function currentJakartaYear() {
     new Intl.DateTimeFormat('en', { timeZone: 'Asia/Jakarta', year: 'numeric' }).format(new Date()),
   )
 }
+
+export function currentJakartaDate() {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en', {
+      timeZone: 'Asia/Jakarta',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+      .formatToParts(new Date())
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value]),
+  )
+  return `${parts.year}-${parts.month}-${parts.day}`
+}

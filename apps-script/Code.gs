@@ -134,6 +134,24 @@ function doPost(e) {
         result = handle_holiday_restore(payload, ctx)
         break
 
+      case 'plan.generate':
+        result = handle_plan_generate(payload, ctx)
+        break
+      case 'activity.list':
+        result = handle_activity_list(payload, ctx)
+        break
+      case 'activity.upsert':
+        result = handle_activity_upsert(payload, ctx)
+        break
+      case 'activity.bulkStatus':
+        result = handle_activity_bulkStatus(payload, ctx)
+        break
+      case 'activity.delete':
+        result = handle_activity_delete(payload, ctx)
+        break
+      case 'activity.restore':
+        result = handle_activity_restore(payload, ctx)
+        break
       default:
         return jsonError('NOT_FOUND', 'Aksi belum diimplementasikan: ' + action)
     }

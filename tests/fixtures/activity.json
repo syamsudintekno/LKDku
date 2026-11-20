@@ -1,0 +1,64 @@
+{
+  "month": "2026-10",
+  "config": {
+    "unsur_list": ["Pendidikan", "Penelitian", "Pengabdian", "Penunjang"],
+    "satuan_list": ["Kelas", "Kegiatan", "Draft", "Modul", "Laporan"]
+  },
+  "years": [{ "id": "year-test", "tahun": 2026, "status": "aktif" }],
+  "items": [
+    {
+      "id": "item-test",
+      "skp_year_id": "year-test",
+      "kode": "P-UJI",
+      "unsur": "Pendidikan",
+      "satuan_target": "Kelas",
+      "aktif": 1
+    }
+  ],
+  "templates": [
+    {
+      "id": "template-a",
+      "skp_item_id": "item-test",
+      "deskripsi": "Kelas A untuk pengujian",
+      "hari": 4,
+      "frekuensi": "mingguan",
+      "tgl_mulai": "2026-10-01",
+      "tgl_akhir": "2026-10-28",
+      "jam_mulai": "07:00",
+      "jam_selesai": "09:30",
+      "jumlah": 1,
+      "satuan": "Kelas",
+      "pengecualian": [],
+      "urutan": 1
+    },
+    {
+      "id": "template-b",
+      "skp_item_id": "item-test",
+      "deskripsi": "Kelas B untuk pengujian",
+      "hari": 4,
+      "frekuensi": "mingguan",
+      "tgl_mulai": "2026-10-01",
+      "tgl_akhir": "2026-10-28",
+      "jam_mulai": "09:30",
+      "jam_selesai": "12:00",
+      "jumlah": 1,
+      "satuan": "Kelas",
+      "pengecualian": [],
+      "urutan": 2
+    }
+  ],
+  "activity": {
+    "tanggal": "2026-10-01",
+    "deskripsi": "Kegiatan palsu untuk pengujian",
+    "unsur": "Pendidikan",
+    "jumlah": 1,
+    "satuan": "Kelas",
+    "jam_mulai": "07:00",
+    "jam_selesai": "09:30",
+    "skp_item_id": "item-test",
+    "template_id": "",
+    "sumber": "skp",
+    "alasan_insidental": "",
+    "status": "rencana"
+  }
+}

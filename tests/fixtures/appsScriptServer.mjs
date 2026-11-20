@@ -99,10 +99,16 @@ export const createServer = () => {
     'setup.gs',
     'auth.gs',
     'schedule.gs',
+    'dateDomain.gs',
+    'activityDomain.gs',
+    'activityDays.gs',
+    'planDomain.gs',
     'reference.gs',
     'profile.gs',
     'skp.gs',
     'holiday.gs',
+    'activity.gs',
+    'plan.gs',
     'Code.gs',
   ]) {
     runInContext(
