@@ -27,3 +27,6 @@ yarn-error.log*
 # security & secrets
 .env
 .clasprc.json
+
+# Apps Script project binding is local to this workstation
+.clasp.json
