@@ -4,6 +4,23 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-20 — Implementasi M1
+
+### Ditambahkan
+
+- Profil dan kop laporan dengan pratinjau teks, validasi NIP, serta kontrol versi untuk mencegah penimpaan perubahan dari tab lain.
+- SKP tahunan berstatus draft/aktif/arsip; butir dengan kode unik, unsur, indikator, target dan satuan; serta template dengan rentang, frekuensi, jam, jumlah, urutan, dan tanggal pengecualian.
+- Pratinjau tanggal dari server sebelum menyimpan. Domain frontend dan port Apps Script diuji dengan fixture yang sama; port dihasilkan lewat `scripts/sync-domain.mjs`.
+- Pengelolaan libur nasional/cuti bersama/kampus dan impor JSON per tahun yang memvalidasi seluruh isian sebelum menulis serta melewati tanggal duplikat.
+- Optimistic update, rollback, toast galat, soft delete, Urungkan lima detik, penulisan batch dengan LockService, serta audit perubahan. Hapus/pulihkan butir menjaga activity lama dan status template yang sebelumnya dihapus.
+- Tabel desktop dan kartu mobile, modal yang dapat digulir, tab pengaturan dengan navigasi keyboard, serta kontras tombol sekunder pada tema gelap.
+
+### Verifikasi dan batas
+
+- `npm run lint`, 57 tes pada 10 berkas, dan `npm run build` lulus. Tes mencakup rollback, draft SKP kedua pada tahun yang sama, dan pergantian tahun Asia/Jakarta. Uji browser lokal mencakup simpan profil palsu, impor libur, buat SKP/butir/template, pratinjau dengan libur dan pengecualian, hapus/urungkan lalu reload, aktivasi dan arsip, serta tampilan 360 px dan 1280 px.
+- Pemisahan polyfill mempertahankan kompatibilitas dan menghilangkan peringatan ukuran chunk. Bundel utama sekitar 427 KB dan polyfill 256 KB minifikasi; perubahan ini tidak dinyatakan mengurangi keseluruhan unduhan atau mempercepat pemuatan tanpa pengukuran.
+- Header sheet tidak berubah. Uji live M0/M1 masih terbuka; pengembangan M1 dilanjutkan atas arahan pemilik tanpa menyatakan uji live lulus. Deploy, merge, serta perubahan data Google nyata belum dijalankan. Rincian aturan dan checklist ada di `docs/m1-acceptance.md`.
+
 ## [Unreleased] - 2026-11-20 — Perbaikan fondasi M0
 
 ### Diubah
@@ -23,7 +40,7 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 - Uji browser lokal pada 360 px dan 1280 px: login salah/benar, navigasi Beranda/Pengaturan, Mode Mati bertahan setelah reload, tema terang/gelap, serta logout dan penolakan akses ulang.
 - Tes mencakup router/token, penyimpanan sesi, logout jaringan gagal, tombol/animasi, dan siklus autentikasi kode Apps Script dengan layanan Google simulasi.
 - API lokal khusus fixture memungkinkan uji browser tanpa menghubungi Google Sheets.
-- Uji Web App dan spreadsheet uji nyata belum dilakukan; M0 belum dinyatakan selesai. M1 menunggu penerimaan M0. Riwayat Git tidak ditulis ulang dan data pada Google Sheets/Drive tidak diubah.
+- Uji Web App dan spreadsheet uji nyata belum dilakukan; M0 belum dinyatakan selesai. Status uji live M0 tetap terbuka; lihat catatan implementasi M1 di atas. Riwayat Git tidak ditulis ulang dan data pada Google Sheets/Drive tidak diubah.
 
 ## [0.1.0] - 2026-11-19 — Milestone M0: Kerangka Dasar & Autentikasi
 

@@ -132,3 +132,31 @@ html[data-motion='mati'] {
 .login-brand {
   color: var(--cui-link-color);
 }
+
+.reference-modal-form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+.feedback-toaster {
+  max-width: 100vw;
+}
+.table td,
+.table th {
+  overflow-wrap: anywhere;
+}
+
+.btn-ghost-secondary,
+[data-coreui-theme='dark'] .btn-ghost-secondary {
+  --cui-btn-color: var(--cui-body-color);
+  --cui-btn-hover-color: var(--cui-body-color);
+  --cui-btn-active-color: var(--cui-body-color);
+}
+[data-coreui-theme='dark'] .btn-ghost-danger {
+  --cui-btn-color: #fca5a5;
+  --cui-btn-hover-color: #fff;
+}
+.feedback-toaster .toast {
+  color: #fff;
+}

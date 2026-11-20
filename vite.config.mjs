@@ -8,6 +8,11 @@ export default defineConfig(() => {
     base: '/LKDku/',
     build: {
       outDir: 'build',
+      rolldownOptions: {
+        output: {
+          codeSplitting: { groups: [{ name: 'polyfills', test: /node_modules[\\/]core-js[\\/]/ }] },
+        },
+      },
     },
     css: {
       postcss: {

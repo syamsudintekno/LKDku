@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CSpinner, useColorModes } from '@coreui/react'
 import './scss/style.scss'
 import RequireSession from './components/RequireSession'
+import { FeedbackProvider } from './components/ui/FeedbackProvider'
 import { MotionProvider } from './motion/useMotionPref'
 
 // Containers
@@ -37,30 +38,32 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <MotionProvider>
-        <HashRouter>
-          <Suspense
-            fallback={
-              <div className="pt-5 text-center min-vh-100 d-flex flex-column align-items-center justify-content-center">
-                <CSpinner color="primary" variant="grow" />
-                <div className="mt-3 text-body-secondary small">Memuat LKB-App...</div>
-              </div>
-            }
-          >
-            <Routes>
-              <Route path="/login" name="Login Page" element={<Login />} />
-              <Route path="/authentication/login" element={<Navigate to="/login" replace />} />
-              <Route
-                path="*"
-                name="Home"
-                element={
-                  <RequireSession>
-                    <DefaultLayout />
-                  </RequireSession>
-                }
-              />
-            </Routes>
-          </Suspense>
-        </HashRouter>
+        <FeedbackProvider>
+          <HashRouter>
+            <Suspense
+              fallback={
+                <div className="pt-5 text-center min-vh-100 d-flex flex-column align-items-center justify-content-center">
+                  <CSpinner color="primary" variant="grow" />
+                  <div className="mt-3 text-body-secondary small">Memuat LKB-App...</div>
+                </div>
+              }
+            >
+              <Routes>
+                <Route path="/login" name="Login Page" element={<Login />} />
+                <Route path="/authentication/login" element={<Navigate to="/login" replace />} />
+                <Route
+                  path="*"
+                  name="Home"
+                  element={
+                    <RequireSession>
+                      <DefaultLayout />
+                    </RequireSession>
+                  }
+                />
+              </Routes>
+            </Suspense>
+          </HashRouter>
+        </FeedbackProvider>
       </MotionProvider>
     </QueryClientProvider>
   )

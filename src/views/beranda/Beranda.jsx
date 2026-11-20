@@ -25,9 +25,7 @@ const Beranda = () => {
               <dd className="col-sm-9">{profile.unit_kerja || 'Belum diisi'}</dd>
             </dl>
           ) : (
-            <p className="mb-0">
-              Profil belum diisi. Pengelolaan profil tersedia pada tahap berikutnya.
-            </p>
+            <p className="mb-0">Profil belum diisi. Lengkapi profil melalui Pengaturan.</p>
           )}
         </CCardBody>
       </CCard>

@@ -26,7 +26,7 @@ Implementasi diuji dengan fixture palsu dan layanan Google simulasi. Uji login/l
 - [ ] Form dan navigasi terbaca pada 360 px dan desktop; fokus keyboard terlihat. Mode Ceria/Tenang/Mati tersimpan di perangkat; reduced-motion selalu memaksa Mati.
 - [ ] Tombol tekan-tahan membatalkan aksi bila dilepas sebelum satu detik, dan berfungsi dengan pointer maupun Space/Enter.
 
-Setelah daftar ini lulus, catat hasil pada changelog sebelum memulai M1: profil, SKP/template, serta hari libur.
+Catat hasil uji live pada changelog setelah daftar ini lulus. Atas arahan pemilik pada 20 November 2026 untuk melanjutkan tanpa URL lingkungan uji, M1 dikembangkan dengan fixture palsu sambil menunggu penerimaan M0. Arahan tersebut tidak dianggap sebagai bukti uji live lulus atau izin deploy.
 
 ## Catatan migrasi dari fondasi awal
 

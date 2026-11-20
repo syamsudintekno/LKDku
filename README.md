@@ -2,7 +2,7 @@
 
 Aplikasi pribadi berbasis React + CoreUI Free, Google Apps Script, dan Google Sheets. Frontend menggunakan HashRouter dan dibangun ke `build/` untuk GitHub Pages.
 
-Fondasi M0 telah diperbaiki dan diuji dengan layanan Google simulasi. Uji penerimaan pada Web App dan spreadsheet uji milik pemilik masih diperlukan sebelum M0 dinyatakan selesai dan pekerjaan M1 dimulai.
+Fondasi M0 serta fitur M1 (profil, SKP/template, dan hari libur) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik untuk melanjutkan, pengembangan M1 berjalan sambil menunggu uji penerimaan M0 pada Web App dan spreadsheet uji nyata. Belum ada deploy atau perubahan data Google milik pengguna.
 
 ## Menjalankan frontend
 
@@ -23,6 +23,12 @@ Tanpa URL API, aplikasi menampilkan pesan konfigurasi dan tombol Masuk tidak akt
 ## Menyiapkan backend
 
 Ikuti [panduan setup dan penerimaan M0](docs/m0-setup.md). Jangan memakai spreadsheet produksi untuk pengembangan. File `.clasp.json` adalah konfigurasi lokal; ikatan proyek milik pengguna tidak dikirim ke GitHub.
+
+## Fitur M1
+
+Pengaturan memuat formulir profil dan kop dengan pratinjau teks, hari libur per tahun dengan impor JSON, serta mode animasi. Halaman SKP mengelola tahun, butir, template, dan pratinjau tanggal dari server sebelum menyimpan. SKP arsip hanya dapat dibaca. Penghapusan butir/template/libur bersifat soft delete, disertai opsi Urungkan selama lima detik.
+
+Aturan jadwal, kontrak perubahan, dan daftar uji penerimaan dijelaskan di [panduan M1](docs/m1-acceptance.md). Logika tanggal frontend dan Apps Script memakai fixture yang sama. Setelah mengubah `src/domain/templateSchedule.js`, jalankan `node scripts/sync-domain.mjs`; tes memastikan port `.gs` tetap identik.
 
 ## GitHub
 
