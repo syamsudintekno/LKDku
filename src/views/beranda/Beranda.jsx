@@ -30,8 +30,8 @@ const Beranda = () => {
         </CCardBody>
       </CCard>
       <CAlert color="info">
-        Catat kegiatan melalui Pencatatan Harian atau buat draft dari template SKP. Pratinjau dan
-        finalisasi laporan bulanan akan tersedia pada tahap berikutnya.
+        Catat kegiatan melalui Pencatatan Harian atau buat draft dari template SKP. Periksa dan
+        finalisasi hasilnya melalui Laporan Bulanan.
       </CAlert>
       <div className="d-flex flex-wrap gap-2">
         <Link to="/harian" className="btn btn-primary">

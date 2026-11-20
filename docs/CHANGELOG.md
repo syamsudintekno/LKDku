@@ -4,6 +4,17 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-20 — Implementasi M3
+
+- Domain laporan dengan tes terlebih dahulu: susunan tanggal/nomor, hanya terealisasi pada final, snapshot terlepas, validasi Error/Peringatan, tanggal tanda tangan, dan nama file. Hari kerja kosong diperingatkan tanpa baris, mengikuti penafsiran BR-04 yang disetujui.
+- API laporan untuk daftar bulan, pratinjau/pemeriksaan, finalisasi idempoten menurut versi sumber, ekspor ulang snapshot dan buka kembali beralasan. LockService, versi, audit, batas snapshot, dan kompensasi file ke Trash saat penulisan record gagal menjaga status tersimpan.
+- Halaman Laporan berisi tiga tab, tautan Perbaiki menuju tanggal Harian, konfirmasi terikat versi, kontrol tekan-tahan, pesan gagal/sukses dan tampilan dokumen yang dapat digulir pada ponsel.
+- Template PDF A4 dengan CSS bersama pratinjau, escaping, header tabel berulang dan blok penutup/tanda tangan. Pemilik memilih A4 sesuai design.md meskipun contoh Oktober berukuran Legal. Referensi hanya dibaca; data nyata/tanda tangan/stempel tidak masuk repo.
+- Profil menambah key opsional `logo_kop` (PNG/JPEG kecil) tanpa mengubah header sheet. Tidak ada perubahan struktur SKP, dependensi, pemasangan skill, deploy, merge, atau penulisan data Google nyata.
+- Transisi tab memakai token; konfeti di-lazy-load hanya setelah finalisasi/PDF dikonfirmasi server, dengan pembatalan dan dukungan Tenang/Mati/reduced-motion. Uji lokal tidak menggantikan konversi Google dan pemeriksaan fidelitas PDF live; checklist ada di `docs/m3-acceptance.md`.
+- Loop render sidebar yang ditemukan saat resize diperbaiki dengan menghentikan umpan balik pengukuran viewport ke perintah buka/tutup; penutupan menu mobile tetap disinkronkan dan diberi tes regresi.
+- Lint, 111 tes pada 21 berkas, dan build lulus. Browser fixture mencakup finalisasi/buka kembali, snapshot tanpa rencana, perbaikan tanggal, serta navigasi dan tampilan 360/1280 px. Konversi PDF dan Drive pada fixture disimulasikan.
+
 ## [Unreleased] - 2026-11-20 — Implementasi M2
 
 ### Ditambahkan

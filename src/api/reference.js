@@ -105,6 +105,8 @@ export function useReferenceMutation(action, { onSaved, undo, quiet = false } = 
       Promise.all([
         client.invalidateQueries({ queryKey: ['bootstrap'] }),
         client.invalidateQueries({ queryKey: ['activities'] }),
+        client.invalidateQueries({ queryKey: ['report'] }),
+        client.invalidateQueries({ queryKey: ['reports'] }),
       ]),
   })
   return mutation

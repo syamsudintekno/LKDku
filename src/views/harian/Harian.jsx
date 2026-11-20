@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   CAlert,
   CCard,
@@ -21,6 +22,7 @@ import { generateUuid } from '../../api/client'
 import { currentJakartaDate, formatTableDate } from '../../domain/dateId'
 import { buildActivityDays, monthDates, plannedActivitiesForScope } from '../../domain/activityDays'
 import { findTimeConflicts } from '../../domain/activity'
+import { isIsoDate } from '../../domain/templateSchedule'
 import ActivityCalendar from './ActivityCalendar'
 import ActivityRow from './ActivityRow'
 import ActivityList from './ActivityList'
@@ -29,9 +31,12 @@ import DraftGenerator from './DraftGenerator'
 
 const Harian = () => {
   const today = currentJakartaDate()
-  const [month, setMonth] = useState(today.slice(0, 7))
+  const location = useLocation()
+  const requested = new URLSearchParams(location.search).get('date')
+  const initialDate = isIsoDate(requested) ? requested : today
+  const [month, setMonth] = useState(initialDate.slice(0, 7))
   const [monthInput, setMonthInput] = useState(month)
-  const [selected, setSelected] = useState(today)
+  const [selected, setSelected] = useState(initialDate)
   const [editor, setEditor] = useState(null)
   const [generator, setGenerator] = useState(false)
   const [deleting, setDeleting] = useState(null)

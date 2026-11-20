@@ -94,7 +94,12 @@ export function useActivityMutation(action, { onSaved, undo, quiet = false } = {
           undo: undo ? () => undo(response) : undefined,
         })
     },
-    onSettled: () => client.invalidateQueries({ queryKey: ['activities'] }),
+    onSettled: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: ['activities'] }),
+        client.invalidateQueries({ queryKey: ['report'] }),
+        client.invalidateQueries({ queryKey: ['reports'] }),
+      ]),
   })
   const prepare = (payload) =>
     action === 'activity.upsert' && !payload.id

@@ -23,3 +23,11 @@ export const HOLD_MS = 1000
 export const STAGGER = { list: 0.04, maxDelay: 0.2 }
 export const OFFSET = { list: 8 }
 export const BADGE_SWING = [-8, 6, -3, 0]
+export const REPORT_MOTION = { offset: 12 }
+export const CONFETTI = {
+  particleCount: 70,
+  spread: 65,
+  ticks: 70,
+  originY: 0.65,
+  durationMs: 1400,
+}

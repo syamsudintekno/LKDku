@@ -2,7 +2,7 @@
 
 Aplikasi pribadi berbasis React + CoreUI Free, Google Apps Script, dan Google Sheets. Frontend menggunakan HashRouter dan dibangun ke `build/` untuk GitHub Pages.
 
-Fondasi M0, fitur M1 (profil, SKP/template, hari libur), serta M2 (generator draft dan pencatatan harian) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik, pengembangan dilanjutkan sambil menunggu penerimaan live pada Web App dan spreadsheet uji terpisah. Belum ada deploy atau perubahan data Google milik pengguna.
+Fondasi M0, M1 (profil/SKP/libur), M2 (generator/Harian), dan M3 (pemeriksaan/pratinjau/finalisasi/PDF) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik, pengembangan dilanjutkan sambil menunggu penerimaan live pada Web App dan spreadsheet uji terpisah. Belum ada deploy atau perubahan data Google milik pengguna.
 
 ## Menjalankan frontend
 
@@ -34,7 +34,13 @@ Aturan jadwal, kontrak perubahan, dan daftar uji penerimaan dijelaskan di [pandu
 
 Harian menyediakan kalender bulanan, generator dengan pratinjau dan kunci idempoten, input dari SKP/insidental, peringatan bentrok jam, centang tunggal dan massal, serta ubah/pindah/batalkan dan soft delete dengan Urungkan. Animasi memakai token dan menghormati Mode animasi serta reduced-motion. Rincian dan checklist live ada di [panduan M2](docs/m2-acceptance.md).
 
-Logika murni berada di `src/domain/`. Setelah mengubah domain yang dipakai backend, jalankan `node scripts/sync-domain.mjs`; tes memeriksa kesamaan port Apps Script. Tidak ada perubahan header sheet. Pratinjau/finalisasi/PDF adalah cakupan M3.
+Logika murni berada di `src/domain/`. Setelah mengubah domain yang dipakai backend, jalankan `node scripts/sync-domain.mjs`; tes memeriksa kesamaan port Apps Script. Tidak ada perubahan header sheet.
+
+## Fitur M3
+
+Laporan menyediakan daftar bulan dan tab Pratinjau/Pemeriksaan/Ekspor. Finalisasi memerlukan pemeriksaan versi, persetujuan peringatan dan tekan-tahan; snapshot hanya memuat kegiatan terealisasi. PDF memakai Apps Script dan folder Drive pribadi. Buka kembali memerlukan alasan; ekspor ulang memakai snapshot, termasuk profil dan kop saat finalisasi. Logo PNG/JPEG kecil dapat diunggah melalui Profil.
+
+Keluaran memakai A4 sesuai konfirmasi pemilik, meskipun PDF referensi Oktober memakai Legal. Template dan pratinjau berbagi CSS; hasil konversi Google dan fidelitas PDF masih perlu penerimaan live. Lihat [panduan M3](docs/m3-acceptance.md).
 
 ## GitHub
 
@@ -53,6 +59,8 @@ node tests/fixtures/serveApi.mjs
 ```
 
 Untuk fixture M2 dengan SKP aktif dan dua template Kamis Oktober 2026, gunakan `node tests/fixtures/serveApi.mjs --activity-fixture`, lalu buka Harian dan pilih Oktober 2026. Kegiatan baru dibuat setelah Periksa draft dan Simpan draft rencana.
+
+Untuk alur M3, gunakan `node tests/fixtures/serveApi.mjs --report-fixture`. Fixture memberi profil palsu, tiga kegiatan terealisasi dan satu rencana Oktober. Konversi PDF/Drive disimulasikan; tautan file test-only bukan PDF Google nyata dan tidak perlu dibuka.
 
 Terminal PowerShell kedua:
 

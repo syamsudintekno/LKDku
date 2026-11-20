@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { CAlert, CCard, CCardBody, CForm } from '@coreui/react'
+import { CAlert, CCard, CCardBody, CForm, CFormInput } from '@coreui/react'
 import ReferenceFields from '../../components/ui/ReferenceFields'
 import FunButton from '../../components/ui/FunButton'
 import { APP_ICONS } from '../../components/ui/icons'
@@ -30,6 +30,7 @@ const fields = [
 const ProfileForm = ({ data }) => {
   const [draft, setDraft] = useState({ ...data.profile })
   const [version, setVersion] = useState(data.profileVersion)
+  const [logoError, setLogoError] = useState('')
   const mutation = useReferenceMutation('profile.update', {
     onSaved: (saved) => {
       setDraft(saved.profile)
@@ -62,6 +63,52 @@ const ProfileForm = ({ data }) => {
         onChange={changed}
         disabled={mutation.isPending}
       />
+      <CFormInput
+        id="profile-logo"
+        type="file"
+        accept="image/png,image/jpeg"
+        label="Logo kop (PNG/JPEG, maksimal 14 KB)"
+        className="mt-3"
+        disabled={mutation.isPending}
+        onChange={(event) => {
+          const file = event.target.files?.[0]
+          if (!file) return
+          if (!['image/png', 'image/jpeg'].includes(file.type) || file.size > 14000) {
+            setLogoError('Pilih PNG/JPEG maksimal 14 KB.')
+            event.target.value = ''
+            return
+          }
+          const reader = new FileReader()
+          reader.onload = () => {
+            setDraft((previous) => ({ ...previous, logo_kop: reader.result }))
+            mutation.reset()
+            setLogoError('')
+          }
+          reader.onerror = () => setLogoError('Logo belum dapat dibaca. Pilih ulang berkas.')
+          reader.readAsDataURL(file)
+        }}
+      />
+      {logoError && (
+        <p role="alert" className="text-danger">
+          {logoError}
+        </p>
+      )}
+      {draft.logo_kop && (
+        <div className="mt-2">
+          <img
+            src={draft.logo_kop}
+            alt="Logo kop laporan"
+            style={{ maxWidth: 80, maxHeight: 80 }}
+          />
+          <FunButton
+            variant="ghost"
+            onClick={() => changed({ ...draft, logo_kop: '' })}
+            disabled={mutation.isPending}
+          >
+            Hapus logo dari profil
+          </FunButton>
+        </div>
+      )}
       <CCard className="mt-4">
         <CCardBody>
           <h3 className="h6">Pratinjau teks kop</h3>
