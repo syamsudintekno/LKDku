@@ -5,6 +5,7 @@ for (const [name, port] of [
   ['activity', 'activityDomain'],
   ['activityDays', 'activityDays'],
   ['plan', 'planDomain'],
+  ['report', 'reportDomain'],
 ]) {
   const source = readFileSync(new URL(`../src/domain/${name}.js`, import.meta.url), 'utf8')
   const body = source
@@ -16,3 +17,15 @@ for (const [name, port] of [
     `// Generated from src/domain/${name}.js. Run node scripts/sync-domain.mjs.\n` + body,
   )
 }
+const reportStyles = readFileSync(
+  new URL('../src/views/laporan/report.css', import.meta.url),
+  'utf8',
+)
+const reportTemplate = new URL('../apps-script/report.html', import.meta.url)
+writeFileSync(
+  reportTemplate,
+  readFileSync(reportTemplate, 'utf8').replace(
+    /<style>[\s\S]*?<\/style>/,
+    `<style>\n${reportStyles}\n</style>`,
+  ),
+)

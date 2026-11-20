@@ -38,6 +38,7 @@ function handle_profile_update(payload, ctx) {
       'atasan_nip',
       'atasan_jabatan',
       'folder_pdf_id',
+      'logo_kop',
     ]
     if (
       !payload.profile ||
@@ -50,7 +51,16 @@ function handle_profile_update(payload, ctx) {
       referenceError('VALIDATION', 'Isian profil tidak valid.')
     var profile = {}
     keys.forEach(function (key) {
-      profile[key] = referenceText(payload.profile[key], key, false)
+      if (key === 'logo_kop') {
+        var logo = payload.profile[key] || ''
+        if (
+          typeof logo !== 'string' ||
+          logo.length > 20000 ||
+          (logo && !/^data:image\/(png|jpeg);base64,[A-Za-z0-9+/]+={0,2}$/.test(logo))
+        )
+          referenceError('VALIDATION', 'Logo harus PNG/JPEG dengan ukuran maksimal 14 KB.')
+        profile[key] = logo
+      } else profile[key] = referenceText(payload.profile[key], key, false)
     })
     ;['nip', 'atasan_nip'].forEach(function (key) {
       if (profile[key] && !/^\d{18}$/.test(profile[key]))

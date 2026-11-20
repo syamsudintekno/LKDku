@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><style>
+@page {
+  size: A4 portrait;
+  margin: 15mm 18mm;
+}
+.report-document,
+.report-document * {
+  box-sizing: border-box;
+}
+.report-document table {
+  border-collapse: collapse;
+  font: inherit;
+}
+.report-document {
+  font:
+    9.5pt Cambria,
+    Georgia,
+    serif;
+  color: #1b1f23;
+  background: white;
+  width: 174mm;
+  padding: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.2;
+  margin: 0;
+}
+.report-document p {
+  margin: 0 0 3mm;
+}
+.report-document header {
+  position: relative;
+  min-height: 20mm;
+  padding-inline: 20mm;
+  text-align: center;
+  border-bottom: 1px solid #4b5563;
+  padding-bottom: 3mm;
+  font-weight: bold;
+}
+.report-document .report-logo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18mm;
+  height: 18mm;
+  object-fit: contain;
+}
+.report-document header p {
+  margin: 1mm;
+}
+.report-document h1 {
+  text-align: center;
+  font:
+    bold 12pt Arial,
+    sans-serif;
+  margin: 5mm 0 1mm;
+}
+.report-document .period {
+  text-align: center;
+  font-weight: bold;
+}
+.report-document .identity {
+  margin: 5mm 0;
+}
+.report-document .identity td {
+  padding: 1mm;
+}
+.report-document .report {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid #d9dee3;
+}
+.report-document .report th {
+  background: #1f5f5b;
+  color: white;
+  font:
+    bold 9pt Arial,
+    sans-serif;
+  padding: 3mm 1mm;
+  text-align: center;
+}
+.report-document .report td {
+  padding: 1.7mm 1mm;
+  border-bottom: 1px solid #d9dee3;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.report-document thead {
+  display: table-header-group;
+}
+.report-document tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.report-document .center {
+  text-align: center;
+}
+.report-document .holiday {
+  background: #e6e8ea;
+  text-align: center;
+  font-style: italic;
+}
+.report-document .closing {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-top: 8mm;
+  font:
+    9pt Arial,
+    sans-serif;
+}
+.report-document .signatures {
+  width: 100%;
+  margin-top: 3mm;
+}
+.report-document .signatures td {
+  width: 50%;
+  vertical-align: top;
+}
+.report-document .space {
+  height: 25mm;
+}
+.report-document .report-planned {
+  background: #fef3c7;
+}
+.report-document .report-screen-label {
+  display: block;
+  font:
+    bold 8pt Arial,
+    sans-serif;
+  color: #92400e;
+  margin-top: 1mm;
+}
+.report-scroll {
+  overflow-x: auto;
+  padding: 1rem;
+  background: #e6e8ea;
+  border-radius: 10px;
+}
+.report-paper {
+  width: max-content;
+  padding: 15mm 18mm;
+  background: white;
+  margin: auto;
+}
+
+</style></head><body class="report-document">
+<header><? if(report.profile.logo_kop) { ?><img class="report-logo" src="<?= report.profile.logo_kop ?>" alt="Logo institusi"><? } ?><? for (var k of ['kop_1','kop_2','kop_3','alamat_kop']) { if(report.profile[k]) { ?><p><?= report.profile[k] ?></p><? } } ?></header>
+<h1>LAPORAN KINERJA BULANAN</h1><p class="period">Periode: Bulan <?= formatPeriod(report.month) ?></p>
+<table class="identity"><? for(var pair of [['Nama','nama'],['NIP','nip'],['Jabatan','jabatan'],['Unit Kerja','unit_kerja'],['Satuan Kerja','satuan_kerja']]) { ?><tr><td><b><?= pair[0] ?></b></td><td>:</td><td><?= report.profile[pair[1]] ?></td></tr><? } ?></table>
+<table class="report"><colgroup><col style="width:17%"><col style="width:5%"><col style="width:46%"><col style="width:12%"><col style="width:8%"><col style="width:12%"></colgroup><thead><tr><? for(var label of ['Hari / Tanggal','No.','Deskripsi Laporan Kinerja','Unsur Tridharma','Jumlah','Satuan']) { ?><th><?= label ?></th><? } ?></tr></thead><tbody>
+<? for(var day of report.rows) { if(day.kind==='holiday') { ?><tr><td colspan="6" class="holiday"><?= formatTableDate(day.tanggal) ?> — Libur Umum</td></tr><? } else { for(var i=0;i<day.records.length;i++) { var row=day.records[i]; ?><tr><td><?= i===0?formatTableDate(day.tanggal):'' ?></td><td class="center"><?= row.nomor ?></td><td><?= row.deskripsi_laporan ?></td><td class="center"><?= row.unsur ?></td><td class="center"><?= row.jumlah ?></td><td class="center"><?= row.satuan ?></td></tr><? } } } ?>
+</tbody></table>
+<section class="closing"><p>Demikian laporan kinerja bulanan ini dibuat berdasarkan yang sebenarnya.</p><table class="signatures"><tr><td>Mengetahui,<br><?= report.profile.atasan_jabatan ?>,</td><td><?= formatSignatureDate(report.tanggal_ttd,report.profile.kota_ttd) ?><br>Yang membuat laporan,</td></tr><tr><td class="space"></td><td></td></tr><tr><td><?= report.profile.atasan_nama ?><br>NIP. <?= report.profile.atasan_nip ?></td><td><?= report.profile.nama ?><br>NIP. <?= report.profile.nip ?></td></tr></table></section>
+</body></html>

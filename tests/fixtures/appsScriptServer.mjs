@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { createContext, runInContext } from 'node:vm'
 import { createHash, randomUUID } from 'node:crypto'
+import { renderReportTemplate } from './renderReport.mjs'
 
 export const createServer = () => {
   const sheets = new Map()
@@ -8,6 +9,39 @@ export const createServer = () => {
     ['SPREADSHEET_ID', 'test-spreadsheet'],
     ['PEPPER', 'test-only-pepper'],
   ])
+  const driveFiles = new Map(),
+    driveFolders = new Map(),
+    pdfAttempts = []
+  const makeFolder = (name) => ({
+    getFoldersByName: (child) => ({
+      hasNext: () => driveFolders.has(name + '/' + child),
+      next: () => driveFolders.get(name + '/' + child),
+    }),
+    createFolder: (child) => {
+      const folder = makeFolder(name + '/' + child)
+      driveFolders.set(name + '/' + child, folder)
+      return folder
+    },
+    createFile: (blob) => {
+      if (!locked) throw Error('PDF write without lock')
+      const id = randomUUID(),
+        file = {
+          id,
+          blob,
+          trashed: false,
+          getId: () => id,
+          getUrl: () => `https://drive.google.com/file/d/test-only-${id}/view`,
+          isTrashed() {
+            return this.trashed
+          },
+          setTrashed(value) {
+            this.trashed = value
+          },
+        }
+      driveFiles.set(id, file)
+      return file
+    },
+  })
   let locked = false
   const sheet = (name) => {
     const rows = []
@@ -54,6 +88,37 @@ export const createServer = () => {
   const context = createContext({
     Date,
     Logger: { log: () => {} },
+    DriveApp: {
+      getFolderById: () => makeFolder('fixture-root'),
+      getFileById: (id) => {
+        if (!driveFiles.has(id)) throw Error('Missing fixture file')
+        return driveFiles.get(id)
+      },
+    },
+    HtmlService: {
+      createTemplateFromFile: (name) => {
+        if (name !== 'report') throw Error('Unexpected template')
+        const template = {
+          evaluate() {
+            const html = renderReportTemplate(this)
+            return {
+              getAs: (mime) => {
+                pdfAttempts.push({ html, mime })
+                return {
+                  html,
+                  mime,
+                  setName(name) {
+                    this.name = name
+                    return this
+                  },
+                }
+              },
+            }
+          },
+        }
+        return template
+      },
+    },
     PropertiesService: { getScriptProperties: () => props },
     SpreadsheetApp: { openById: () => spreadsheet },
     LockService: {
@@ -103,12 +168,14 @@ export const createServer = () => {
     'activityDomain.gs',
     'activityDays.gs',
     'planDomain.gs',
+    'reportDomain.gs',
     'reference.gs',
     'profile.gs',
     'skp.gs',
     'holiday.gs',
     'activity.gs',
     'plan.gs',
+    'report.gs',
     'Code.gs',
   ]) {
     runInContext(
@@ -126,5 +193,5 @@ export const createServer = () => {
     )
   const login = () =>
     request('auth.login', { username: 'test-user', password: 'test-only-password' })
-  return { context, properties, request, login, sheets }
+  return { context, properties, request, login, sheets, driveFiles, pdfAttempts }
 }

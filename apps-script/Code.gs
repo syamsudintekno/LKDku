@@ -153,6 +153,30 @@ function doPost(e) {
         result = handle_activity_restore(payload, ctx)
         break
       default:
+        if (action === 'report.preview') {
+          result = handle_report_preview(payload, ctx)
+          break
+        }
+        if (action === 'report.validate') {
+          result = handle_report_validate(payload, ctx)
+          break
+        }
+        if (action === 'report.list') {
+          result = handle_report_list(payload, ctx)
+          break
+        }
+        if (action === 'report.finalize') {
+          result = handle_report_finalize(payload, ctx)
+          break
+        }
+        if (action === 'report.reopen') {
+          result = handle_report_reopen(payload, ctx)
+          break
+        }
+        if (action === 'report.exportPdf') {
+          result = handle_report_exportPdf(payload, ctx)
+          break
+        }
         return jsonError('NOT_FOUND', 'Aksi belum diimplementasikan: ' + action)
     }
 

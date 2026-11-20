@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs'
 import { createServer } from './appsScriptServer.mjs'
 
 const { context } = createServer()
-if (process.argv.includes('--activity-fixture')) {
+if (process.argv.includes('--activity-fixture') || process.argv.includes('--report-fixture')) {
   const fixture = JSON.parse(readFileSync(new URL('./activity.json', import.meta.url), 'utf8'))
   context.withLock(() => {
     for (const [name, rows] of [
@@ -13,6 +13,30 @@ if (process.argv.includes('--activity-fixture')) {
       ['skp_template', fixture.templates],
     ])
       for (const row of rows) context.appendSheetRecord(name, { ...row })
+    if (process.argv.includes('--report-fixture')) {
+      for (const row of context.getSheetRecords('profile'))
+        context.updateSheetRecord('profile', row.id, {
+          value: row.key.includes('nip')
+            ? '000000000000000000'
+            : row.key === 'folder_pdf_id'
+              ? 'fixture-folder-for-pdf'
+              : row.key === 'nama'
+                ? 'Dosen Uji'
+                : 'Isian profil uji',
+        })
+      for (const tanggal of ['2026-10-01', '2026-10-03', '2026-10-17'])
+        context.appendSheetRecord('activity', {
+          ...fixture.activity,
+          tanggal,
+          status: 'terealisasi',
+        })
+      context.appendSheetRecord('activity', {
+        ...fixture.activity,
+        tanggal: '2026-10-02',
+        deskripsi: 'Rencana kegiatan uji',
+        status: 'rencana',
+      })
+    }
   })
 }
 const allowedOrigins = new Set(['http://127.0.0.1:3002', 'http://localhost:3002'])

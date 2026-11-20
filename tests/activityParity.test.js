@@ -14,6 +14,7 @@ it('port domain Apps Script tetap identik dan memakai fixture M2 yang sama', () 
     ['activity', 'activityDomain'],
     ['activityDays', 'activityDays'],
     ['plan', 'planDomain'],
+    ['report', 'reportDomain'],
   ]) {
     const source = readFileSync(new URL(`../src/domain/${name}.js`, import.meta.url), 'utf8')
     const expected =
@@ -33,4 +34,9 @@ it('port domain Apps Script tetap identik dan memakai fixture M2 yang sama', () 
   expect(
     JSON.parse(JSON.stringify(context.buildActivityDays('2026-10', [fixture.activity], []))),
   ).toEqual(buildActivityDays('2026-10', [fixture.activity], []))
+})
+it('template PDF memakai CSS dokumen yang sama dengan pratinjau', () => {
+  const css = readFileSync(new URL('../src/views/laporan/report.css', import.meta.url), 'utf8')
+  const html = readFileSync(new URL('../apps-script/report.html', import.meta.url), 'utf8')
+  expect(html.match(/<style>\n([\s\S]*?)\n<\/style>/)[1]).toBe(css)
 })
