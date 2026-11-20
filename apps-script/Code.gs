@@ -66,6 +66,31 @@ function doPost(e) {
     }
 
     var result
+    if (
+      getScriptProp('BACKUP_RECOVERY_REQUIRED') &&
+      !action.startsWith('auth.') &&
+      [
+        'bootstrap',
+        'profile.get',
+        'config.get',
+        'skp.year.list',
+        'skp.item.list',
+        'skp.template.list',
+        'skp.template.preview',
+        'holiday.list',
+        'activity.list',
+        'report.preview',
+        'report.validate',
+        'report.list',
+        'dashboard.summary',
+        'backup.export',
+      ].indexOf(action) < 0
+    ) {
+      return jsonError(
+        'FORBIDDEN_STATE',
+        'Pemulihan sebelumnya belum lengkap. Pemilik perlu memeriksa data; ekspor cadangan tetap tersedia.',
+      )
+    }
     switch (action) {
       case 'auth.logout':
         result = handle_auth_logout(payload, ctx)
@@ -153,6 +178,38 @@ function doPost(e) {
         result = handle_activity_restore(payload, ctx)
         break
       default:
+        if (action === 'dashboard.summary') {
+          result = handle_dashboard_summary(payload, ctx)
+          break
+        }
+        if (action === 'backup.export') {
+          result = handle_backup_export(payload, ctx)
+          break
+        }
+        if (action === 'backup.import') {
+          result = handle_backup_import(payload, ctx)
+          break
+        }
+        if (action === 'config.get') {
+          result = handle_config_get(payload, ctx)
+          break
+        }
+        if (action === 'config.update') {
+          result = handle_config_update(payload, ctx)
+          break
+        }
+        if (action === 'auth.changePassword') {
+          result = handle_auth_changePassword(payload, ctx)
+          break
+        }
+        if (action === 'auth.sessions') {
+          result = handle_auth_sessions(payload, ctx)
+          break
+        }
+        if (action === 'auth.revokeOthers') {
+          result = handle_auth_revokeOthers(payload, ctx)
+          break
+        }
         if (action === 'report.preview') {
           result = handle_report_preview(payload, ctx)
           break

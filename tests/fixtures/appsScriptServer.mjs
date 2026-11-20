@@ -56,6 +56,13 @@ export const createServer = () => {
       setFrozenRows: () => {},
       getRange: (row, col, height, width) => {
         const range = {
+          clearContent: () => {
+            if (!locked) throw Error('Write without lock')
+            for (let r = 0; r < height; r++)
+              for (let c = 0; c < width; c++)
+                if (rows[row - 1 + r]) rows[row - 1 + r][col - 1 + c] = ''
+            while (rows.length > 1 && rows.at(-1).every((value) => value === '')) rows.pop()
+          },
           getValues: () =>
             Array.from({ length: height }, (_, r) =>
               Array.from({ length: width }, (_, c) => rows[row - 1 + r]?.[col - 1 + c] ?? ''),
@@ -169,6 +176,8 @@ export const createServer = () => {
     'activityDays.gs',
     'planDomain.gs',
     'reportDomain.gs',
+    'dashboardDomain.gs',
+    'backupDomain.gs',
     'reference.gs',
     'profile.gs',
     'skp.gs',
@@ -176,6 +185,9 @@ export const createServer = () => {
     'activity.gs',
     'plan.gs',
     'report.gs',
+    'dashboard.gs',
+    'backup.gs',
+    'settings.gs',
     'Code.gs',
   ]) {
     runInContext(

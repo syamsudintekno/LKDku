@@ -4,7 +4,12 @@ import { readFileSync } from 'node:fs'
 import { createServer } from './appsScriptServer.mjs'
 
 const { context } = createServer()
-if (process.argv.includes('--activity-fixture') || process.argv.includes('--report-fixture')) {
+const dashboardFixture = process.argv.includes('--dashboard-fixture')
+if (
+  process.argv.includes('--activity-fixture') ||
+  process.argv.includes('--report-fixture') ||
+  dashboardFixture
+) {
   const fixture = JSON.parse(readFileSync(new URL('./activity.json', import.meta.url), 'utf8'))
   context.withLock(() => {
     for (const [name, rows] of [
@@ -12,8 +17,19 @@ if (process.argv.includes('--activity-fixture') || process.argv.includes('--repo
       ['skp_item', fixture.items],
       ['skp_template', fixture.templates],
     ])
-      for (const row of rows) context.appendSheetRecord(name, { ...row })
-    if (process.argv.includes('--report-fixture')) {
+      for (const row of rows)
+        context.appendSheetRecord(name, {
+          ...row,
+          ...(name === 'skp_item'
+            ? {
+                rencana_hasil_kerja: 'Pengajaran uji',
+                indikator: 'Jumlah kelas',
+                target_tahunan: 4,
+              }
+            : {}),
+          ...(name === 'skp_template' ? { pengecualian: JSON.stringify(row.pengecualian) } : {}),
+        })
+    if (process.argv.includes('--report-fixture') || dashboardFixture) {
       for (const row of context.getSheetRecords('profile'))
         context.updateSheetRecord('profile', row.id, {
           value: row.key.includes('nip')
@@ -37,6 +53,34 @@ if (process.argv.includes('--activity-fixture') || process.argv.includes('--repo
         status: 'rencana',
       })
     }
+    if (dashboardFixture) {
+      const today = context.currentJakartaDate()
+      context.appendSheetRecord('activity', {
+        ...fixture.activity,
+        tanggal: today,
+        deskripsi: 'Kelas hari ini untuk uji',
+        status: 'rencana',
+      })
+      context.appendSheetRecord('activity', {
+        ...fixture.activity,
+        tanggal: today,
+        deskripsi: 'Draft dengan satuan berbeda',
+        satuan: 'Draft',
+        status: 'terealisasi',
+      })
+      context.appendSheetRecord('activity', {
+        ...fixture.activity,
+        tanggal: today,
+        deskripsi: 'Rapat insidental uji',
+        unsur: 'Penunjang',
+        satuan: 'Kegiatan',
+        sumber: 'insidental',
+        skp_item_id: '',
+        template_id: '',
+        alasan_insidental: 'Undangan mendadak untuk pengujian',
+        status: 'terealisasi',
+      })
+    }
   })
 }
 const allowedOrigins = new Set(['http://127.0.0.1:3002', 'http://localhost:3002'])
@@ -55,7 +99,7 @@ createHttpServer(async (request, response) => {
   let body = ''
   for await (const chunk of request) {
     body += chunk
-    if (body.length > 1024 * 1024) {
+    if (body.length > 3 * 1024 * 1024) {
       response.writeHead(413).end()
       return
     }

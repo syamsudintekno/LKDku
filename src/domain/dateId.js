@@ -80,6 +80,17 @@ export function currentJakartaYear() {
     new Intl.DateTimeFormat('en', { timeZone: 'Asia/Jakarta', year: 'numeric' }).format(new Date()),
   )
 }
+export function formatDateTimeId(value) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return (
+    new Intl.DateTimeFormat('id-ID', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: 'Asia/Jakarta',
+    }).format(date) + ' WIB'
+  )
+}
 
 export function currentJakartaDate() {
   const parts = Object.fromEntries(

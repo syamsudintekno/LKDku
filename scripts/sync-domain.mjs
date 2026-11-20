@@ -6,6 +6,8 @@ for (const [name, port] of [
   ['activityDays', 'activityDays'],
   ['plan', 'planDomain'],
   ['report', 'reportDomain'],
+  ['dashboard', 'dashboardDomain'],
+  ['backup', 'backupDomain'],
 ]) {
   const source = readFileSync(new URL(`../src/domain/${name}.js`, import.meta.url), 'utf8')
   const body = source

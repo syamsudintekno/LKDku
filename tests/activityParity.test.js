@@ -15,6 +15,8 @@ it('port domain Apps Script tetap identik dan memakai fixture M2 yang sama', () 
     ['activityDays', 'activityDays'],
     ['plan', 'planDomain'],
     ['report', 'reportDomain'],
+    ['dashboard', 'dashboardDomain'],
+    ['backup', 'backupDomain'],
   ]) {
     const source = readFileSync(new URL(`../src/domain/${name}.js`, import.meta.url), 'utf8')
     const expected =
