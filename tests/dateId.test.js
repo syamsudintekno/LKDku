@@ -19,3 +19,15 @@ describe('Domain DateId (AGENTS.md §7 & §11)', () => {
     expect(formatTimeRange('09:30', '12:00')).toBe('09.30–12.00')
   })
 })
+
+it('mengikuti pergantian tahun Asia/Jakarta', async () => {
+  const { vi } = await import('vitest')
+  const { currentJakartaYear } = await import('../src/domain/dateId')
+  vi.useFakeTimers()
+  try {
+    vi.setSystemTime(new Date('2026-12-31T18:00:00Z'))
+    expect(currentJakartaYear()).toBe(2027)
+  } finally {
+    vi.useRealTimers()
+  }
+})

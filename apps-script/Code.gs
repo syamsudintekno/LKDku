@@ -79,6 +79,61 @@ function doPost(e) {
         result = handle_bootstrap(payload, ctx)
         break
 
+      case 'profile.get':
+        result = handle_profile_get(payload, ctx)
+        break
+      case 'profile.update':
+        result = handle_profile_update(payload, ctx)
+        break
+      case 'skp.year.list':
+        result = handle_skp_year_list(payload, ctx)
+        break
+      case 'skp.year.upsert':
+        result = handle_skp_year_upsert(payload, ctx)
+        break
+      case 'skp.item.list':
+        result = handle_skp_item_list(payload, ctx)
+        break
+      case 'skp.item.upsert':
+        result = handle_skp_item_upsert(payload, ctx)
+        break
+      case 'skp.item.delete':
+        result = handle_skp_item_delete(payload, ctx)
+        break
+      case 'skp.item.restore':
+        result = handle_skp_item_restore(payload, ctx)
+        break
+      case 'skp.template.list':
+        result = handle_skp_template_list(payload, ctx)
+        break
+      case 'skp.template.upsert':
+        result = handle_skp_template_upsert(payload, ctx)
+        break
+      case 'skp.template.preview':
+        result = handle_skp_template_preview(payload, ctx)
+        break
+      case 'skp.template.delete':
+        result = handle_skp_template_delete(payload, ctx)
+        break
+      case 'skp.template.restore':
+        result = handle_skp_template_restore(payload, ctx)
+        break
+      case 'holiday.list':
+        result = handle_holiday_list(payload, ctx)
+        break
+      case 'holiday.upsert':
+        result = handle_holiday_upsert(payload, ctx)
+        break
+      case 'holiday.import':
+        result = handle_holiday_import(payload, ctx)
+        break
+      case 'holiday.delete':
+        result = handle_holiday_delete(payload, ctx)
+        break
+      case 'holiday.restore':
+        result = handle_holiday_restore(payload, ctx)
+        break
+
       default:
         return jsonError('NOT_FOUND', 'Aksi belum diimplementasikan: ' + action)
     }
@@ -104,24 +159,21 @@ function doPost(e) {
 }
 
 function handle_bootstrap(payload, ctx) {
-  var profileRecords = getSheetRecords('profile')
-  var profile = {}
-  for (var p = 0; p < profileRecords.length; p++) {
-    profile[profileRecords[p].key] = profileRecords[p].value
-  }
-
-  var configRecords = getSheetRecords('config')
-  var config = {}
-  for (var c = 0; c < configRecords.length; c++) {
-    try {
-      config[configRecords[c].key] = JSON.parse(configRecords[c].value)
-    } catch (e) {
-      config[configRecords[c].key] = configRecords[c].value
-    }
-  }
-
+  var tahun =
+    payload.tahun === undefined
+      ? Number(Utilities.formatDate(new Date(), 'Asia/Jakarta', 'yyyy'))
+      : referenceNumber(payload.tahun, 'Tahun', 1900, 2200, true)
+  var state = getProfileState()
   return {
-    profile: profile,
-    config: config,
+    profile: state.profile,
+    profileVersion: state.version,
+    config: referenceConfig(),
+    years: getSheetRecords('skp_year'),
+    items: getSheetRecords('skp_item'),
+    templates: getSheetRecords('skp_template'),
+    holidays: getSheetRecords('holiday').filter(function (row) {
+      return Number(row.tanggal.slice(0, 4)) === tahun
+    }),
+    tahun: tahun,
   }
 }

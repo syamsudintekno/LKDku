@@ -74,3 +74,9 @@ function parseIsoDate(str) {
   }
   return new Date(str)
 }
+
+export function currentJakartaYear() {
+  return Number(
+    new Intl.DateTimeFormat('en', { timeZone: 'Asia/Jakarta', year: 'numeric' }).format(new Date()),
+  )
+}

@@ -33,7 +33,7 @@ function getSheet(sheetName) {
 /**
  * Membaca semua baris aktif (deleted == 0) dari sheet tertentu dan mengembalikannya sebagai array object
  */
-function getSheetRecords(sheetName) {
+function getSheetRecords(sheetName, includeDeleted) {
   var sheet = getSheet(sheetName)
   var values = sheet.getDataRange().getValues()
   if (!values || values.length <= 1) {
@@ -50,7 +50,7 @@ function getSheetRecords(sheetName) {
       obj[headers[h]] = row[h]
     }
     // Hanya ambil data yang belum dihapus (deleted == 0 atau kosong)
-    if (obj.deleted != 1) {
+    if (includeDeleted || obj.deleted != 1) {
       records.push(obj)
     }
   }

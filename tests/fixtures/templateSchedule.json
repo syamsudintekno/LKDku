@@ -1,0 +1,20 @@
+{
+  "thursday": {
+    "hari": 4,
+    "frekuensi": "mingguan",
+    "tgl_mulai": "2026-10-01",
+    "tgl_akhir": "2026-10-28",
+    "jam_mulai": "07:00",
+    "jam_selesai": "09:30",
+    "pengecualian": []
+  },
+  "thursdayDates": ["2026-10-01", "2026-10-08", "2026-10-15", "2026-10-22"],
+  "saturday": {
+    "hari": 6,
+    "frekuensi": "2-mingguan",
+    "tgl_mulai": "2026-09-05",
+    "tgl_akhir": "2026-10-31",
+    "pengecualian": ["2026-10-31"]
+  },
+  "saturdayDates": ["2026-10-03", "2026-10-17"]
+}

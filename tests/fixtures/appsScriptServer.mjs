@@ -80,7 +80,8 @@ export const createServer = () => {
             )
             .digest(),
         ),
-      formatDate: (date) => date.toISOString(),
+      formatDate: (date, zone, format) =>
+        format === 'yyyy' ? String(date.getUTCFullYear()) : date.toISOString(),
     },
     ContentService: {
       MimeType: { JSON: 'json' },
@@ -92,7 +93,18 @@ export const createServer = () => {
       }),
     },
   })
-  for (const file of ['util.gs', 'data.gs', 'setup.gs', 'auth.gs', 'Code.gs']) {
+  for (const file of [
+    'util.gs',
+    'data.gs',
+    'setup.gs',
+    'auth.gs',
+    'schedule.gs',
+    'reference.gs',
+    'profile.gs',
+    'skp.gs',
+    'holiday.gs',
+    'Code.gs',
+  ]) {
     runInContext(
       readFileSync(new URL(`../../apps-script/${file}`, import.meta.url), 'utf8'),
       context,
