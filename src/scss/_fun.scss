@@ -160,3 +160,117 @@ html[data-motion='mati'] {
 .feedback-toaster .toast {
   color: #fff;
 }
+
+.activity-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+.activity-calendar .fun-button-shell {
+  display: block;
+  min-width: 0;
+}
+.activity-calendar .calendar-day {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0.25rem 0.1rem;
+}
+.activity-calendar .calendar-day span span {
+  display: block;
+}
+.calendar-weekday {
+  text-align: center;
+  padding: 0.35rem 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.calendar-complete {
+  outline: 2px solid var(--cui-success);
+  outline-offset: -3px;
+}
+.activity-calendar .calendar-markers {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+.activity-row {
+  border-top: 1px solid var(--cui-border-color);
+  padding: 1rem 0;
+  overflow-wrap: anywhere;
+}
+.activity-realized {
+  background: rgba(var(--cui-success-rgb), 0.12);
+  border-radius: var(--cui-border-radius);
+  padding: 1rem 0.75rem;
+}
+.min-width-0 {
+  min-width: 0;
+}
+[data-coreui-theme='dark'] .chip-unsur {
+  color: var(--cui-body-color);
+}
+@media (min-width: 992px) {
+  .calendar-panel {
+    position: sticky;
+    top: 128px;
+  }
+}
+@media (max-width: 600px) {
+  .activity-page {
+    margin-inline: -1.375rem;
+  }
+  .activity-page > .row {
+    --cui-gutter-x: 0;
+  }
+  .activity-modal .modal-dialog {
+    margin: 0;
+    min-height: 100%;
+    display: flex;
+    align-items: flex-end;
+  }
+  .activity-modal .modal-content {
+    max-height: calc(100dvh - 0.5rem);
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+.done-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: var(--cui-secondary-color);
+  cursor: pointer;
+}
+.done-check-confirmed {
+  color: var(--ok);
+}
+.done-check-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+.done-check:focus-within {
+  outline: 3px solid var(--cui-link-color);
+  outline-offset: 2px;
+}
+.done-check svg {
+  pointer-events: none;
+  flex-shrink: 0;
+}
+.done-check:has(input:disabled) {
+  cursor: default;
+}
+.done-check-spinner {
+  position: absolute;
+  pointer-events: none;
+}

@@ -2,7 +2,7 @@
 
 Aplikasi pribadi berbasis React + CoreUI Free, Google Apps Script, dan Google Sheets. Frontend menggunakan HashRouter dan dibangun ke `build/` untuk GitHub Pages.
 
-Fondasi M0 serta fitur M1 (profil, SKP/template, dan hari libur) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik untuk melanjutkan, pengembangan M1 berjalan sambil menunggu uji penerimaan M0 pada Web App dan spreadsheet uji nyata. Belum ada deploy atau perubahan data Google milik pengguna.
+Fondasi M0, fitur M1 (profil, SKP/template, hari libur), serta M2 (generator draft dan pencatatan harian) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik, pengembangan dilanjutkan sambil menunggu penerimaan live pada Web App dan spreadsheet uji terpisah. Belum ada deploy atau perubahan data Google milik pengguna.
 
 ## Menjalankan frontend
 
@@ -30,6 +30,12 @@ Pengaturan memuat formulir profil dan kop dengan pratinjau teks, hari libur per 
 
 Aturan jadwal, kontrak perubahan, dan daftar uji penerimaan dijelaskan di [panduan M1](docs/m1-acceptance.md). Logika tanggal frontend dan Apps Script memakai fixture yang sama. Setelah mengubah `src/domain/templateSchedule.js`, jalankan `node scripts/sync-domain.mjs`; tes memastikan port `.gs` tetap identik.
 
+## Fitur M2
+
+Harian menyediakan kalender bulanan, generator dengan pratinjau dan kunci idempoten, input dari SKP/insidental, peringatan bentrok jam, centang tunggal dan massal, serta ubah/pindah/batalkan dan soft delete dengan Urungkan. Animasi memakai token dan menghormati Mode animasi serta reduced-motion. Rincian dan checklist live ada di [panduan M2](docs/m2-acceptance.md).
+
+Logika murni berada di `src/domain/`. Setelah mengubah domain yang dipakai backend, jalankan `node scripts/sync-domain.mjs`; tes memeriksa kesamaan port Apps Script. Tidak ada perubahan header sheet. Pratinjau/finalisasi/PDF adalah cakupan M3.
+
 ## GitHub
 
 Workflow CI memeriksa lint, tes, dan build pada pull request serta branch `codex/**`. Workflow Pages pada `main` memeriksa hal yang sama sebelum deploy. Isi repository variable `VITE_API_URL` dengan URL Web App yang ingin digunakan pada build Pages. Perubahan variabel memerlukan build ulang.
@@ -45,6 +51,8 @@ Terminal pertama:
 ```sh
 node tests/fixtures/serveApi.mjs
 ```
+
+Untuk fixture M2 dengan SKP aktif dan dua template Kamis Oktober 2026, gunakan `node tests/fixtures/serveApi.mjs --activity-fixture`, lalu buka Harian dan pilih Oktober 2026. Kegiatan baru dibuat setelah Periksa draft dan Simpan draft rencana.
 
 Terminal PowerShell kedua:
 

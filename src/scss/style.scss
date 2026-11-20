@@ -9,7 +9,8 @@
   $border-radius: tokens.$border-radius,
   $border-radius-lg: tokens.$border-radius-lg,
   $link-color-dark: tokens.$link-color-dark,
-  $link-hover-color-dark: tokens.$link-hover-color-dark
+  $link-hover-color-dark: tokens.$link-hover-color-dark,
+  $warning-text-emphasis-dark: tokens.$warning-text-emphasis-dark
 );
 @use 'vendors/simplebar';
 @use 'fun';

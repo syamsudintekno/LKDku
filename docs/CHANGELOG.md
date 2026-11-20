@@ -4,6 +4,21 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-20 — Implementasi M2
+
+### Ditambahkan
+
+- Domain generator, validasi kegiatan, bentrok jam, susunan hari, penomoran dan selector terealisasi dengan tes terlebih dahulu. Port Apps Script dihasilkan dari sumber domain yang sama dan diuji memakai fixture bersama.
+- Generator dry run dan simpan dengan pemeriksaan versi pratinjau, kunci idempoten yang tetap tersimpan setelah edit/pindah/batal/soft delete, serta hasil awal berstatus rencana.
+- Harian dengan kalender, daftar tanggal, input SKP/insidental beralasan, centang tunggal/harian/pekan, edit/pindah lintas bulan, pembatalan, soft delete dan Urungkan. Bentrok jam berupa peringatan; jadwal bulan tujuan dimuat sebelum simpan.
+- Validasi server, versi record, penjagaan bulan final asal/tujuan, mutasi massal yang memvalidasi seluruh record sebelum tulis, ID tambah stabil untuk permintaan ulang, LockService, batch dan audit.
+- Animasi centang terkonfirmasi, daftar berurutan, serta badge insidental memakai token. Mode Tenang/Mati dan reduced-motion dihormati. Kalender memiliki label status, ikon insidental/bentrok, serta target sentuh minimal 44 px pada 360 px. Kontras kegiatan selesai dan peringatan pada tema gelap diperbaiki.
+
+### Verifikasi dan batas
+
+- Lint, 89 tes pada 15 berkas, dan build lulus. Browser fixture mencakup generator ulang, insidental/bentrok, centang tunggal dan massal, pindah lintas bulan, Sabtu berkegiatan, hapus/Urungkan, mode gerak dan tampilan 360/1280 px.
+- Header sheet dan dependensi tidak berubah. Tidak ada pemasangan skill, deploy, merge, atau perubahan data Google nyata. Penerimaan live M0/M1/M2 tetap terbuka. Pratinjau laporan, PDF dan finalisasi masuk M3; rincian ada di `docs/m2-acceptance.md`.
+
 ## [Unreleased] - 2026-11-20 — Implementasi M1
 
 ### Ditambahkan

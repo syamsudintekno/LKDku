@@ -30,12 +30,17 @@ const Beranda = () => {
         </CCardBody>
       </CCard>
       <CAlert color="info">
-        Pencatatan kegiatan dan laporan bulanan sedang disiapkan. Ringkasan akan tampil setelah data
-        tersedia.
+        Catat kegiatan melalui Pencatatan Harian atau buat draft dari template SKP. Pratinjau dan
+        finalisasi laporan bulanan akan tersedia pada tahap berikutnya.
       </CAlert>
-      <Link to="/pengaturan" className="btn btn-outline-primary">
-        Buka pengaturan
-      </Link>
+      <div className="d-flex flex-wrap gap-2">
+        <Link to="/harian" className="btn btn-primary">
+          Buka pencatatan harian
+        </Link>
+        <Link to="/pengaturan" className="btn btn-outline-primary">
+          Buka pengaturan
+        </Link>
+      </div>
     </>
   )
 }

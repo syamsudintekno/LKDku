@@ -8,6 +8,7 @@ import { useMotionPref } from '../../motion/useMotionPref'
 
 export const FunButton = ({
   variant = 'primary',
+  announce = true,
   color,
   loading = false,
   success = false,
@@ -158,7 +159,7 @@ export const FunButton = ({
         ) : (
           icon && <CIcon icon={icon} aria-hidden="true" />
         )}
-        <span aria-live="polite">
+        <span aria-live={announce ? 'polite' : undefined}>
           {loading ? 'Memproses...' : success ? 'Tersimpan' : children}
         </span>
       </CButton>
@@ -167,6 +168,7 @@ export const FunButton = ({
 }
 
 FunButton.propTypes = {
+  announce: PropTypes.bool,
   variant: PropTypes.oneOf(['primary', 'success', 'ghost', 'danger', 'danger-hold']),
   color: PropTypes.string,
   loading: PropTypes.bool,

@@ -101,7 +101,11 @@ export function useReferenceMutation(action, { onSaved, undo, quiet = false } = 
           undo: undo ? () => undo(data) : undefined,
         })
     },
-    onSettled: () => client.invalidateQueries({ queryKey: ['bootstrap'] }),
+    onSettled: () =>
+      Promise.all([
+        client.invalidateQueries({ queryKey: ['bootstrap'] }),
+        client.invalidateQueries({ queryKey: ['activities'] }),
+      ]),
   })
   return mutation
 }
