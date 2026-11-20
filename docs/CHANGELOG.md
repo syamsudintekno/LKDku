@@ -4,6 +4,14 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-20 — Implementasi M4
+
+- Dashboard ringkasan bulanan, hari ini, peringatan, capaian tahunan/bulanan dengan satuan sesuai target dan rincian satuan lain. Domain dan port Apps Script memakai fixture bersama. Perayaan hanya setelah mutasi tersimpan melewati ambang terverifikasi.
+- Cadangan bisnis JSON versi 1/CSV dan pemulihan tambahan dengan pratinjau versi, validasi relasi/snapshot/bulan final, batas ukuran, lock, kompensasi gagal tulis serta flag internal pemulihan gagal. Kredensial/sesi tidak diekspor atau dipulihkan; audit hanya diekspor. Tidak ada perubahan header sheet.
+- Pengaturan satuan, ubah password dan pengelolaan sesi; navigasi bawah/ikon responsif, strip tanggal Harian, progres/angka dengan token gerak serta Mati/reduced-motion. Perbaikan fokus, kontras bar gelap, toast tanpa pengumuman ganda, dan status simpan setelah isian berubah.
+- Lint, 134 tes pada 27 berkas, dan build lulus. Browser data palsu mencakup capaian, impor, satuan dan tampilan 360/800/1280 px. Audit/polish manual; tidak memasang skill atau dependensi. Pemetaan insidental khusus tetap v1.1 sesuai cakupan yang disetujui.
+- Penerimaan live M0–M4, fidelitas Google PDF A4, penyimpanan file unduhan aktual, dan pengukuran perangkat nyata tetap terbuka. Tidak ada deploy, merge, atau perubahan data Google nyata. Rincian dan batas ada di `docs/m4-acceptance.md`.
+
 ## [Unreleased] - 2026-11-20 — Implementasi M3
 
 - Domain laporan dengan tes terlebih dahulu: susunan tanggal/nomor, hanya terealisasi pada final, snapshot terlepas, validasi Error/Peringatan, tanggal tanda tangan, dan nama file. Hari kerja kosong diperingatkan tanpa baris, mengikuti penafsiran BR-04 yang disetujui.

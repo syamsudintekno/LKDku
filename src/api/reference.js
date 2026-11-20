@@ -107,6 +107,7 @@ export function useReferenceMutation(action, { onSaved, undo, quiet = false } = 
         client.invalidateQueries({ queryKey: ['activities'] }),
         client.invalidateQueries({ queryKey: ['report'] }),
         client.invalidateQueries({ queryKey: ['reports'] }),
+        client.invalidateQueries({ queryKey: ['dashboard'] }),
       ]),
   })
   return mutation

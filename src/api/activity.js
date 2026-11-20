@@ -99,6 +99,7 @@ export function useActivityMutation(action, { onSaved, undo, quiet = false } = {
         client.invalidateQueries({ queryKey: ['activities'] }),
         client.invalidateQueries({ queryKey: ['report'] }),
         client.invalidateQueries({ queryKey: ['reports'] }),
+        client.invalidateQueries({ queryKey: ['dashboard'] }),
       ]),
   })
   const prepare = (payload) =>

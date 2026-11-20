@@ -1,4 +1,5 @@
 import { CONFETTI } from './tokens'
+export const celebrateAchievement = (mode) => celebrateReport(mode)
 
 export function celebrateReport(mode) {
   let cancelled = false,

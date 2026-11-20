@@ -2,7 +2,7 @@
 
 Aplikasi pribadi berbasis React + CoreUI Free, Google Apps Script, dan Google Sheets. Frontend menggunakan HashRouter dan dibangun ke `build/` untuk GitHub Pages.
 
-Fondasi M0, M1 (profil/SKP/libur), M2 (generator/Harian), dan M3 (pemeriksaan/pratinjau/finalisasi/PDF) sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik, pengembangan dilanjutkan sambil menunggu penerimaan live pada Web App dan spreadsheet uji terpisah. Belum ada deploy atau perubahan data Google milik pengguna.
+Fondasi M0–M4 sudah diimplementasikan dan diuji dengan layanan Google simulasi. Atas arahan pemilik, pengembangan dilanjutkan sambil menunggu penerimaan live pada Web App dan spreadsheet uji terpisah. Belum ada deploy atau perubahan data Google milik pengguna.
 
 ## Menjalankan frontend
 
@@ -42,6 +42,10 @@ Laporan menyediakan daftar bulan dan tab Pratinjau/Pemeriksaan/Ekspor. Finalisas
 
 Keluaran memakai A4 sesuai konfirmasi pemilik, meskipun PDF referensi Oktober memakai Legal. Template dan pratinjau berbagi CSS; hasil konversi Google dan fidelitas PDF masih perlu penerimaan live. Lihat [panduan M3](docs/m3-acceptance.md).
 
+## Fitur M4
+
+Beranda menampilkan ringkasan bulanan dan capaian SKP dengan satuan sesuai target. Pengaturan menyediakan cadangan JSON/CSV, pemulihan dengan pratinjau versi, satuan, perubahan password, dan sesi. Navigasi mobile dan strip tanggal Harian melengkapi tampilan desktop. Pemulihan menambahkan data dan menolak konflik, dengan batas JSON 2 MB. Rincian perilaku, pemulihan gagal, audit UI, dan batas verifikasi ada di [panduan M4](docs/m4-acceptance.md).
+
 ## GitHub
 
 Workflow CI memeriksa lint, tes, dan build pada pull request serta branch `codex/**`. Workflow Pages pada `main` memeriksa hal yang sama sebelum deploy. Isi repository variable `VITE_API_URL` dengan URL Web App yang ingin digunakan pada build Pages. Perubahan variabel memerlukan build ulang.
@@ -63,6 +67,8 @@ Untuk fixture M2 dengan SKP aktif dan dua template Kamis Oktober 2026, gunakan `
 Untuk alur M3, gunakan `node tests/fixtures/serveApi.mjs --report-fixture`. Fixture memberi profil palsu, tiga kegiatan terealisasi dan satu rencana Oktober. Konversi PDF/Drive disimulasikan; tautan file test-only bukan PDF Google nyata dan tidak perlu dibuka.
 
 Terminal PowerShell kedua:
+
+Untuk M4, gunakan `node tests/fixtures/serveApi.mjs --dashboard-fixture`: target palsu 4 Kelas, tiga Kelas terealisasi, satu rencana hari ini, satuan berbeda, dan insidental. Data hanya berada di memori proses lokal.
 
 ```powershell
 $env:VITE_API_URL = 'http://127.0.0.1:3001'

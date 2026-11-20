@@ -24,6 +24,7 @@ import { buildActivityDays, monthDates, plannedActivitiesForScope } from '../../
 import { findTimeConflicts } from '../../domain/activity'
 import { isIsoDate } from '../../domain/templateSchedule'
 import ActivityCalendar from './ActivityCalendar'
+import WeekStrip from './WeekStrip'
 import ActivityRow from './ActivityRow'
 import ActivityList from './ActivityList'
 import ActivityForm, { emptyActivity } from './ActivityForm'
@@ -125,7 +126,16 @@ const Harian = () => {
                 <CCard className="calendar-panel">
                   <CCardBody className="p-2">
                     <h2 className="h5 p-2 mb-1">Kalender {month}</h2>
-                    <ActivityCalendar days={days} selected={selected} onSelect={setSelected} />
+                    <div className="calendar-month-desktop">
+                      <ActivityCalendar days={days} selected={selected} onSelect={setSelected} />
+                    </div>
+                    <div className="calendar-week-mobile">
+                      <WeekStrip days={days} selected={selected} onSelect={setSelected} />
+                      <details>
+                        <summary className="py-3">Lihat kalender sebulan</summary>
+                        <ActivityCalendar days={days} selected={selected} onSelect={setSelected} />
+                      </details>
+                    </div>
                   </CCardBody>
                 </CCard>
               </CCol>

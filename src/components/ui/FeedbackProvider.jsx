@@ -16,6 +16,8 @@ export const FeedbackProvider = ({ children }) => {
       <CToaster placement="bottom-end" className="p-3 feedback-toaster">
         {messages.map((message) => (
           <CToast
+            role={message.error ? 'alert' : 'status'}
+            aria-live={message.error ? 'assertive' : 'polite'}
             key={message.id}
             visible
             color={message.error ? 'danger' : 'success'}
@@ -25,9 +27,7 @@ export const FeedbackProvider = ({ children }) => {
           >
             <CToastBody>
               <div className="d-flex align-items-start gap-2">
-                <span role={message.error ? 'alert' : 'status'} className="flex-grow-1">
-                  {message.text}
-                </span>
+                <span className="flex-grow-1">{message.text}</span>
                 <CToastClose aria-label="Tutup pemberitahuan" onClick={() => dismiss(message.id)} />
               </div>
               {(message.undo || message.retry) && (

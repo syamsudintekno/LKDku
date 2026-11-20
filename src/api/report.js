@@ -24,6 +24,7 @@ export function useReportMutation(action, onSaved) {
         client.invalidateQueries({ queryKey: ['report'] }),
         client.invalidateQueries({ queryKey: ['reports'] }),
         client.invalidateQueries({ queryKey: ['activities'] }),
+        client.invalidateQueries({ queryKey: ['dashboard'] }),
       ])
       onSaved?.(result)
     },

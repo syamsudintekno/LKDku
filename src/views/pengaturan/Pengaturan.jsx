@@ -7,6 +7,9 @@ import ReferenceState from '../../components/ui/ReferenceState'
 import ProfileForm from './ProfileForm'
 import HolidaySettings from './HolidaySettings'
 import YearPicker from '../../components/ui/YearPicker'
+import BackupSettings from './BackupSettings'
+import UnitSettings from './UnitSettings'
+import SecuritySettings from './SecuritySettings'
 
 const Pengaturan = () => {
   const { savedMode, setMode, reduced } = useMotionPref()
@@ -21,6 +24,9 @@ const Pengaturan = () => {
           ['profile', 'Profil dan kop'],
           ['holidays', 'Hari libur'],
           ['appearance', 'Tampilan'],
+          ['units', 'Unsur dan satuan'],
+          ['security', 'Keamanan'],
+          ['backup', 'Cadangan'],
         ].map(([key, label]) => (
           <CNavItem key={key}>
             <CNavLink
@@ -32,7 +38,7 @@ const Pengaturan = () => {
               aria-controls={`settings-${key}`}
               id={`tab-${key}`}
               onKeyDown={(event) => {
-                const keys = ['profile', 'holidays', 'appearance']
+                const keys = ['profile', 'holidays', 'appearance', 'units', 'security', 'backup']
                 const index = keys.indexOf(key)
                 const next =
                   event.key === 'ArrowRight'
@@ -60,7 +66,13 @@ const Pengaturan = () => {
       </CNav>
       <CCard className="shadow-sm">
         <CCardBody role="tabpanel" id={`settings-${tab}`} aria-labelledby={`tab-${tab}`}>
-          {tab === 'appearance' ? (
+          {tab === 'backup' ? (
+            <BackupSettings />
+          ) : tab === 'units' ? (
+            <UnitSettings />
+          ) : tab === 'security' ? (
+            <SecuritySettings />
+          ) : tab === 'appearance' ? (
             <>
               <h2 className="h5 mb-3">Tampilan dan gerak</h2>
               <CFormSelect
