@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { CButton, CSpinner } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { motion } from 'motion/react'
-import { PRESS, HOVER_LIFT } from '../../motion/tokens'
+import { DUR, EASE, PRESS, HOVER_LIFT, HOLD_MS } from '../../motion/tokens'
+import { useMotionPref } from '../../motion/useMotionPref'
 
-/**
- * FunButton - Pembungkus CButton CoreUI dengan micro-interactions dan feedback visual
- */
 export const FunButton = ({
   variant = 'primary',
   color,
@@ -22,107 +20,149 @@ export const FunButton = ({
   size,
   ...props
 }) => {
-  const [holdProgress, setHoldProgress] = useState(0)
-  const holdIntervalRef = useRef(null)
-
+  const { mode, enabled } = useMotionPref()
+  const [progress, setProgress] = useState(0)
+  const interval = useRef(null)
+  const holding = useRef(false)
   const isHold = variant === 'danger-hold'
+  const blocked = disabled || loading || success
 
-  const handleMouseDown = (e) => {
-    if (!isHold || disabled || loading) return
+  const cancelHold = useCallback(() => {
+    clearInterval(interval.current)
+    interval.current = null
+    holding.current = false
+    setProgress(0)
+  }, [])
 
-    setHoldProgress(0)
-    const startTime = Date.now()
-    const duration = 1000 // 1 detik tekan-tahan
+  useEffect(() => {
+    if (blocked) {
+      clearInterval(interval.current)
+      interval.current = null
+      holding.current = false
+    }
+    window.addEventListener('blur', cancelHold)
+    return () => {
+      clearInterval(interval.current)
+      window.removeEventListener('blur', cancelHold)
+    }
+  }, [blocked, cancelHold])
 
-    holdIntervalRef.current = setInterval(() => {
-      const elapsed = Date.now() - startTime
-      const progress = Math.min(100, (elapsed / duration) * 100)
-      setHoldProgress(progress)
-
-      if (progress >= 100) {
-        clearInterval(holdIntervalRef.current)
-        holdIntervalRef.current = null
-        if (onHoldComplete) {
-          onHoldComplete(e)
-        }
+  const startHold = (event) => {
+    if (!isHold || blocked || holding.current) return
+    holding.current = true
+    setProgress(0)
+    const started = Date.now()
+    interval.current = setInterval(() => {
+      const value = Math.min(1, (Date.now() - started) / HOLD_MS)
+      setProgress(value)
+      if (value === 1) {
+        clearInterval(interval.current)
+        interval.current = null
+        onHoldComplete?.(event)
       }
-    }, 20)
+    }, DUR.instant * 1000)
   }
 
-  const handleMouseUp = () => {
-    if (!isHold) return
-    if (holdIntervalRef.current) {
-      clearInterval(holdIntervalRef.current)
-      holdIntervalRef.current = null
-    }
-    setHoldProgress(0)
-  }
-
-  // Tentukan warna CoreUI
-  let coreUiColor = color
-  let coreUiVariant = undefined
-
-  if (!color) {
-    if (variant === 'primary') coreUiColor = 'primary'
-    else if (variant === 'success') coreUiColor = 'success'
-    else if (variant === 'ghost') {
-      coreUiColor = 'secondary'
-      coreUiVariant = 'ghost'
-    } else if (variant === 'danger' || variant === 'danger-hold') {
-      coreUiColor = 'danger'
-    } else {
-      coreUiColor = 'primary'
-    }
-  }
-
+  const colorName =
+    color || (variant.startsWith('danger') ? 'danger' : variant === 'ghost' ? 'secondary' : variant)
   return (
-    <motion.div
-      whileHover={disabled || loading ? {} : HOVER_LIFT}
-      whileTap={disabled || loading ? {} : PRESS}
-      style={{ display: 'inline-block', position: 'relative' }}
+    <motion.span
+      className="fun-button-shell"
+      tabIndex={-1}
+      whileHover={!blocked && mode === 'ceria' ? HOVER_LIFT : undefined}
+      whileTap={!blocked && mode === 'ceria' ? PRESS : undefined}
+      transition={{ duration: enabled ? DUR.fast : 0, ease: EASE }}
     >
       <CButton
-        color={coreUiColor}
-        variant={coreUiVariant}
-        size={size}
-        disabled={disabled || loading}
-        className={`fun-btn ${className} ${isHold ? 'position-relative overflow-hidden' : ''}`}
-        onClick={isHold ? undefined : onClick}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleMouseDown}
-        onTouchEnd={handleMouseUp}
         {...props}
+        type={props.type || 'button'}
+        color={colorName}
+        variant={variant === 'ghost' ? 'ghost' : undefined}
+        size={size}
+        disabled={blocked}
+        aria-busy={loading}
+        aria-label={
+          isHold
+            ? props['aria-label'] || (typeof children === 'string' ? children : undefined)
+            : props['aria-label']
+        }
+        aria-description={isHold ? 'Tahan selama satu detik untuk melanjutkan.' : undefined}
+        className={`fun-btn ${className}`}
+        onClick={isHold ? (event) => event.preventDefault() : onClick}
+        onPointerDown={(event) => {
+          if (event.button === 0) startHold(event)
+        }}
+        onPointerUp={cancelHold}
+        onPointerCancel={cancelHold}
+        onPointerLeave={cancelHold}
+        onBlur={cancelHold}
+        onKeyDown={(event) => {
+          if (isHold && [' ', 'Enter'].includes(event.key)) {
+            event.preventDefault()
+            if (!event.repeat) startHold(event)
+          }
+        }}
+        onKeyUp={(event) => {
+          if (isHold && [' ', 'Enter'].includes(event.key)) {
+            event.preventDefault()
+            cancelHold()
+          }
+        }}
       >
-        {isHold && holdProgress > 0 && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              height: '100%',
-              width: `${holdProgress}%`,
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
-              transition: 'width 20ms linear',
-              pointerEvents: 'none',
-            }}
-          />
+        {isHold && (
+          <svg
+            className="hold-ring"
+            viewBox="0 0 24 24"
+            role="progressbar"
+            aria-label="Progres tekan-tahan"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round((blocked ? 0 : progress) * 100)}
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              fill="none"
+              stroke="currentColor"
+              opacity="0.25"
+              strokeWidth="2"
+            />
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              pathLength="1"
+              strokeDasharray={`${blocked ? 0 : progress} 1`}
+              transform="rotate(-90 12 12)"
+            />
+          </svg>
         )}
-
         {loading ? (
-          <>
-            <CSpinner size="sm" aria-hidden="true" className="me-1" />
-            <span>Memproses...</span>
-          </>
+          <CSpinner size="sm" aria-hidden="true" />
+        ) : success ? (
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <motion.path
+              d="M5 12l4 4L19 6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              initial={enabled ? { pathLength: 0 } : false}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: enabled ? DUR.base : 0, ease: EASE }}
+            />
+          </svg>
         ) : (
-          <>
-            {icon && <CIcon icon={icon} className="me-1" aria-hidden="true" />}
-            {children}
-          </>
+          icon && <CIcon icon={icon} aria-hidden="true" />
         )}
+        <span aria-live="polite">
+          {loading ? 'Memproses...' : success ? 'Tersimpan' : children}
+        </span>
       </CButton>
-    </motion.div>
+    </motion.span>
   )
 }
 
@@ -138,6 +178,6 @@ FunButton.propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
   size: PropTypes.string,
+  type: PropTypes.string,
 }
-
 export default FunButton

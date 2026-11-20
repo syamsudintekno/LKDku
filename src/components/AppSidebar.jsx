@@ -43,6 +43,7 @@ const AppSidebar = () => {
         <CCloseButton
           className="d-lg-none"
           dark
+          aria-label="Tutup navigasi"
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>

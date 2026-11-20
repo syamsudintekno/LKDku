@@ -13,13 +13,22 @@
 
 // Shake animation untuk login gagal atau validasi error
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 .animate-shake {
-  animation: shake 0.35s ease-in-out;
+  animation: shake var(--motion-base) ease-in-out;
 }
 
 // Chip Unsur Tridharma
@@ -71,31 +80,55 @@
   text-align: center;
 }
 
-// Tombol FunButton hover & active
+// Gerak tombol ditangani motion; CSS menyediakan fokus dan ukuran sentuh.
+.fun-button-shell {
+  display: inline-block;
+  max-width: 100%;
+}
 .fun-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  min-height: 44px;
   font-weight: 500;
-  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease;
-
+  touch-action: manipulation;
   &:hover:not(:disabled) {
-    transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
-
-  &:active:not(:disabled) {
-    transform: scale(0.96);
+  &:focus-visible {
+    outline: 3px solid var(--brand-600);
+    outline-offset: 3px;
+  }
+}
+.hold-ring {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+html[data-motion='mati'] {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
-// Accessibility: Respect reduced motion
-@media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.btn {
+  min-height: 44px;
+}
+
+.login-brand {
+  color: var(--cui-link-color);
 }

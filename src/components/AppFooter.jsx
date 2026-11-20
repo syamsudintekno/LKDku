@@ -6,7 +6,7 @@ const AppFooter = () => {
     <CFooter className="px-4 py-2 border-top">
       <div>
         <span className="fw-semibold">LKB-App</span>
-        <span className="ms-1">&copy; 2026 Ahmad Syamsudin, M.Kom. · UIN Syekh Wasil Kediri</span>
+        <span className="ms-1">Laporan Kinerja Bulanan Dosen</span>
       </div>
       <div className="ms-auto text-body-secondary small">
         <span className="me-1">Dibangun dengan</span>

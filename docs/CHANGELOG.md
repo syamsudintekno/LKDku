@@ -4,9 +4,31 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-20 — Perbaikan fondasi M0
+
+### Diubah
+
+- Login memerlukan API terkonfigurasi; fallback akun demo dan profil pribadi di frontend dihapus. Beranda menampilkan profil dari server serta keadaan kosong, tanpa angka kegiatan/status koneksi rekaan.
+- Halaman kerja memerlukan verifikasi sesi; token tidak valid mengalihkan ke login. Logout membersihkan token dan cache privat meskipun jaringan gagal. Query sesi dapat dibatalkan saat logout.
+- ID spreadsheet hanya dibaca dari Script Properties. Setup membuat profil kosong dan tidak lagi menghapus Sheet1. `setupUser()` mewajibkan kredensial eksplisit, mendukung properti sementara dari editor, serta mencabut sesi lama saat akun diatur ulang. Tidak ada perubahan header sheet.
+- Kegagalan login kelima mengembalikan `LOCKED`; durasi penguncian 15 menit. Validasi bentuk permintaan dan token diperketat, perbandingan hash token memakai constant-time, dan login/logout dicatat tanpa kredensial.
+- FunButton memiliki status loading/sukses, pembatalan timer, serta tekan-tahan satu detik lewat pointer dan keyboard. Mode Ceria/Tenang/Mati disimpan lokal; reduced-motion memaksa Mati.
+- Halaman demo dan komponen dokumentasi template dibersihkan; layout, navigasi, tema, dan LICENSE CoreUI tetap dipertahankan. Breadcrumb memakai router hash dan label Indonesia.
+- Build produksi menyertakan CSP; favicon menggunakan base GitHub Pages. Workflow CI memeriksa lint/tes/build, dan build Pages membaca repository variable publik `VITE_API_URL`.
+- `.clasp.json` dikecualikan dari Git sambil mempertahankan file lokal. Petunjuk setup dan batas pengujian dijelaskan di `docs/m0-setup.md`.
+
+### Verifikasi dan batas
+
+- `npm run lint`, 30 tes pada 7 berkas, dan `npm run build` lulus. Build masih memberi peringatan ukuran chunk JavaScript utama (sekitar 718 KB minifikasi, 236 KB gzip).
+- Uji browser lokal pada 360 px dan 1280 px: login salah/benar, navigasi Beranda/Pengaturan, Mode Mati bertahan setelah reload, tema terang/gelap, serta logout dan penolakan akses ulang.
+- Tes mencakup router/token, penyimpanan sesi, logout jaringan gagal, tombol/animasi, dan siklus autentikasi kode Apps Script dengan layanan Google simulasi.
+- API lokal khusus fixture memungkinkan uji browser tanpa menghubungi Google Sheets.
+- Uji Web App dan spreadsheet uji nyata belum dilakukan; M0 belum dinyatakan selesai. M1 menunggu penerimaan M0. Riwayat Git tidak ditulis ulang dan data pada Google Sheets/Drive tidak diubah.
+
 ## [0.1.0] - 2026-11-19 — Milestone M0: Kerangka Dasar & Autentikasi
 
 ### Ditambahkan
+
 - **Frontend CoreUI Free React Admin:**
   - Setup React 19 + Vite dengan `base: '/LKDku/'` dan keluaran build ke `build/`.
   - Routing `HashRouter` untuk kompatibilitas penuh dengan GitHub Pages.

@@ -1,16 +1,18 @@
-@use "@coreui/coreui/scss/coreui" as * with (
+@use 'variables' as tokens;
+@use '@coreui/coreui/scss/coreui' as * with (
   $enable-deprecation-messages: false,
-  $primary: #1f5f5b,
-  $success: #15803d,
-  $warning: #b45309,
-  $danger: #b91c1c,
-  $info: #1d4ed8,
-  $border-radius: 10px,
-  $border-radius-lg: 12px
+  $primary: tokens.$primary,
+  $success: tokens.$success,
+  $warning: tokens.$warning,
+  $danger: tokens.$danger,
+  $info: tokens.$info,
+  $border-radius: tokens.$border-radius,
+  $border-radius-lg: tokens.$border-radius-lg,
+  $link-color-dark: tokens.$link-color-dark,
+  $link-hover-color-dark: tokens.$link-hover-color-dark
 );
-@use "@coreui/chartjs/scss/coreui-chartjs";
-@use "vendors/simplebar";
-@use "fun";
+@use 'vendors/simplebar';
+@use 'fun';
 
 body {
   background-color: var(--cui-tertiary-bg);
@@ -20,7 +22,6 @@ body {
   width: 100%;
   padding-inline: var(--cui-sidebar-occupy-start, 0) var(--cui-sidebar-occupy-end, 0);
   will-change: auto;
-  @include transition(padding .15s);
 }
 
 .header > .container-fluid,

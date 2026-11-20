@@ -1,19 +1,33 @@
 import React from 'react'
-import { CCard, CCardBody, CBadge } from '@coreui/react'
+import { CAlert, CCard, CCardBody, CFormSelect } from '@coreui/react'
+import { useMotionPref } from '../../motion/useMotionPref'
 
-const Pengaturan = () => (
-  <CCard className="border-0 shadow-sm p-4">
-    <CCardBody>
-      <div className="d-flex align-items-center justify-content-between mb-3">
-        <h4 className="fw-bold mb-0">Pengaturan Sistem</h4>
-        <CBadge color="success">Aktif Sebagian (M0)</CBadge>
-      </div>
-      <p className="text-body-secondary">
-        Pengaturan profil dosen, kop surat kementerian, daftar hari libur, unsur/satuan, dan
-        manajemen kata sandi.
-      </p>
-    </CCardBody>
-  </CCard>
-)
-
+const Pengaturan = () => {
+  const { savedMode, setMode, reduced } = useMotionPref()
+  return (
+    <CCard className="shadow-sm">
+      <CCardBody>
+        <h1 className="h4 mb-3">Pengaturan</h1>
+        <CFormSelect
+          id="motion-mode"
+          label="Mode animasi"
+          value={savedMode}
+          onChange={(event) => setMode(event.target.value)}
+          options={[
+            { value: 'ceria', label: 'Ceria' },
+            { value: 'tenang', label: 'Tenang' },
+            { value: 'mati', label: 'Mati' },
+          ]}
+        />
+        <p className="small text-body-secondary mt-2">Pilihan disimpan di perangkat ini.</p>
+        {reduced && (
+          <CAlert color="info">Pengaturan perangkat mengurangi gerakan. Animasi dimatikan.</CAlert>
+        )}
+        <p className="mb-0">
+          Pengelolaan profil, SKP, dan hari libur tersedia pada tahap berikutnya.
+        </p>
+      </CCardBody>
+    </CCard>
+  )
+}
 export default Pengaturan

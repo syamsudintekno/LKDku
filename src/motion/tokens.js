@@ -17,3 +17,5 @@ export const EASE = [0.22, 1, 0.36, 1]
 export const PRESS = { scale: 0.96 }
 
 export const HOVER_LIFT = { y: -2, scale: 1.02 }
+
+export const HOLD_MS = 1000

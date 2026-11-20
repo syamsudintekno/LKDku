@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import autoprefixer from 'autoprefixer'
 
 export default defineConfig(() => {
@@ -16,12 +16,29 @@ export default defineConfig(() => {
         ],
       },
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      {
+        name: 'production-csp',
+        apply: 'build',
+        transformIndexHtml: () => [
+          {
+            tag: 'meta',
+            attrs: {
+              'http-equiv': 'Content-Security-Policy',
+              content:
+                "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://drive.google.com https://*.googleusercontent.com; connect-src 'self' https://script.google.com https://script.googleusercontent.com",
+            },
+            injectTo: 'head-prepend',
+          },
+        ],
+      },
+    ],
     resolve: {
       alias: [
         {
           find: 'src/',
-          replacement: `${path.resolve(__dirname, 'src')}/`,
+          replacement: fileURLToPath(new URL('./src/', import.meta.url)),
         },
       ],
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.scss'],

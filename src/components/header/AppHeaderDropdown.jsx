@@ -18,8 +18,13 @@ const AppHeaderDropdown = () => {
   const logoutMutation = useLogout()
 
   const handleLogout = async () => {
-    await logoutMutation.mutateAsync()
-    navigate('/login', { replace: true })
+    try {
+      await logoutMutation.mutateAsync()
+    } catch {
+      // Sesi lokal tetap diakhiri bila server tidak terjangkau.
+    } finally {
+      navigate('/login', { replace: true })
+    }
   }
 
   const profile = authData?.profile || {}
@@ -30,12 +35,13 @@ const AppHeaderDropdown = () => {
         placement="bottom-end"
         className="py-0 pe-0 d-flex align-items-center"
         caret={false}
+        aria-label="Menu pengguna"
       >
         <div
           className="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
           style={{ width: '38px', height: '38px', backgroundColor: '#1f5f5b' }}
         >
-          AS
+          {(profile.nama || authData?.user?.username || 'P').slice(0, 1).toUpperCase()}
         </div>
       </CDropdownToggle>
       <CDropdownMenu
@@ -44,21 +50,38 @@ const AppHeaderDropdown = () => {
         style={{ borderRadius: '10px' }}
       >
         <CDropdownHeader className="bg-body-secondary fw-semibold mb-2 py-2">
-          <div>{profile.nama || 'Ahmad Syamsudin, M.Kom.'}</div>
+          <div>{profile.nama || authData?.user?.username || 'Pengguna'}</div>
           <div className="small fw-normal text-body-secondary">
-            NIP: {profile.nip || '198809022015031004'}
+            NIP: {profile.nip || 'Belum diisi'}
           </div>
         </CDropdownHeader>
-        <CDropdownItem onClick={() => navigate('/pengaturan')} style={{ cursor: 'pointer' }}>
+        <CDropdownItem
+          as="button"
+          type="button"
+          onClick={() => navigate('/pengaturan')}
+          style={{ cursor: 'pointer' }}
+        >
           <CIcon icon={cilUser} className="me-2" />
           Profil Pegawai
         </CDropdownItem>
-        <CDropdownItem onClick={() => navigate('/pengaturan')} style={{ cursor: 'pointer' }}>
+        <CDropdownItem
+          as="button"
+          type="button"
+          onClick={() => navigate('/pengaturan')}
+          style={{ cursor: 'pointer' }}
+        >
           <CIcon icon={cilSettings} className="me-2" />
           Pengaturan
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem onClick={handleLogout} className="text-danger" style={{ cursor: 'pointer' }}>
+        <CDropdownItem
+          as="button"
+          type="button"
+          onClick={handleLogout}
+          disabled={logoutMutation.isPending}
+          className="text-danger"
+          style={{ cursor: 'pointer' }}
+        >
           <CIcon icon={cilAccountLogout} className="me-2 text-danger" />
           Keluar
         </CDropdownItem>

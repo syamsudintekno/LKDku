@@ -16,10 +16,13 @@ import {
   CButton,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilLockLocked, cilUser, cilCheckCircle } from '@coreui/icons'
+import { cilLockLocked, cilUser, cilCheckCircle, cilInput, cilLockUnlocked } from '@coreui/icons'
 import { motion } from 'motion/react'
 import { FunButton } from '../../components/ui/FunButton'
 import { useLogin } from '../../api/auth'
+import { API_URL } from '../../config'
+import { useMotionPref } from '../../motion/useMotionPref'
+import { DUR, EASE } from '../../motion/tokens'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -28,7 +31,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [remember, setRemember] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [shake, setShake] = useState(false)
+  const { mode, enabled } = useMotionPref()
+  const [shakeKey, setShakeKey] = useState(0)
 
   const loginMutation = useLogin()
 
@@ -56,8 +60,7 @@ const Login = () => {
   }
 
   const triggerShake = () => {
-    setShake(true)
-    setTimeout(() => setShake(false), 400)
+    setShakeKey((value) => value + 1)
   }
 
   return (
@@ -66,47 +69,53 @@ const Login = () => {
         <CRow className="justify-content-center">
           <CCol md={6} lg={5}>
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={enabled ? { opacity: 0, y: 8 } : false}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: enabled ? DUR.base : 0, ease: EASE }}
             >
-              <CCardGroup className={shake ? 'animate-shake' : ''}>
+              <CCardGroup>
                 <CCard className="p-4 shadow-sm border-0" style={{ borderRadius: '12px' }}>
                   <CCardBody>
                     <CForm onSubmit={handleSubmit}>
                       <div className="text-center mb-4">
                         <div
-                          className="d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
+                          className="login-brand d-inline-flex align-items-center justify-content-center rounded-circle mb-2"
                           style={{
                             width: '54px',
                             height: '54px',
                             backgroundColor: 'rgba(31, 95, 91, 0.1)',
-                            color: '#1f5f5b',
                           }}
                         >
                           <CIcon icon={cilCheckCircle} size="xl" />
                         </div>
-                        <h2 className="fw-bold mb-1" style={{ color: '#1f5f5b' }}>
-                          LKB-App
-                        </h2>
+                        <h1 className="login-brand h2 fw-bold mb-1">LKB-App</h1>
                         <p className="text-body-secondary small">
                           Laporan Kinerja Bulanan Dosen · UIN Syekh Wasil Kediri
                         </p>
                       </div>
 
                       {errorMessage && (
-                        <CAlert color="danger" className="py-2 small mb-3">
+                        <CAlert
+                          key={shakeKey}
+                          color="danger"
+                          role="alert"
+                          className={`py-2 small mb-3 ${mode === 'ceria' ? 'animate-shake' : ''}`}
+                        >
                           {errorMessage}
                         </CAlert>
                       )}
 
                       <div className="mb-3">
-                        <label className="form-label small fw-semibold">Username</label>
+                        <label htmlFor="login-username" className="form-label small fw-semibold">
+                          Username
+                        </label>
                         <CInputGroup>
                           <CInputGroupText>
                             <CIcon icon={cilUser} />
                           </CInputGroupText>
                           <CFormInput
+                            id="login-username"
+                            required
                             placeholder="Masukkan username"
                             autoComplete="username"
                             value={username}
@@ -117,12 +126,16 @@ const Login = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label className="form-label small fw-semibold">Password</label>
+                        <label htmlFor="login-password" className="form-label small fw-semibold">
+                          Password
+                        </label>
                         <CInputGroup>
                           <CInputGroupText>
                             <CIcon icon={cilLockLocked} />
                           </CInputGroupText>
                           <CFormInput
+                            id="login-password"
+                            required
                             type={showPassword ? 'text' : 'password'}
                             placeholder="Masukkan password"
                             autoComplete="current-password"
@@ -139,7 +152,10 @@ const Login = () => {
                               showPassword ? 'Sembunyikan password' : 'Tampilkan password'
                             }
                           >
-                            {showPassword ? '🙈' : '👁'}
+                            <CIcon
+                              icon={showPassword ? cilLockLocked : cilLockUnlocked}
+                              aria-hidden="true"
+                            />
                           </CButton>
                         </CInputGroup>
                       </div>
@@ -155,13 +171,20 @@ const Login = () => {
                         />
                       </div>
 
+                      {!API_URL && (
+                        <CAlert color="info" role="status">
+                          Layanan belum dikonfigurasi. Hubungkan API sebelum masuk.
+                        </CAlert>
+                      )}
                       <div className="d-grid">
                         <FunButton
                           variant="primary"
                           type="submit"
                           loading={loginMutation.isPending}
+                          disabled={!API_URL}
+                          icon={cilInput}
                           size="lg"
-                          className="py-2"
+                          className="py-2 w-100"
                         >
                           Masuk
                         </FunButton>
