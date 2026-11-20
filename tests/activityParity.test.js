@@ -1,10 +1,17 @@
 // @vitest-environment node
 import { it, expect } from 'vitest'
-import { readFileSync } from 'node:fs'
+import { readFileSync, readdirSync } from 'node:fs'
 import { createContext, runInContext } from 'node:vm'
 import fixture from './fixtures/activity.json'
 import { generateDraftPlan } from '../src/domain/plan'
 import { buildActivityDays } from '../src/domain/activityDays'
+
+it('Apps Script file basenames are unique across file types', () => {
+  const names = readdirSync(new URL('../apps-script/', import.meta.url))
+    .filter((name) => /\.(gs|js|html|json)$/.test(name))
+    .map((name) => name.replace(/\.[^.]+$/, '').toLowerCase())
+  expect(new Set(names).size).toBe(names.length)
+})
 
 it('port domain Apps Script tetap identik dan memakai fixture M2 yang sama', () => {
   const context = createContext({})
@@ -39,6 +46,6 @@ it('port domain Apps Script tetap identik dan memakai fixture M2 yang sama', () 
 })
 it('template PDF memakai CSS dokumen yang sama dengan pratinjau', () => {
   const css = readFileSync(new URL('../src/views/laporan/report.css', import.meta.url), 'utf8')
-  const html = readFileSync(new URL('../apps-script/report.html', import.meta.url), 'utf8')
+  const html = readFileSync(new URL('../apps-script/reportTemplate.html', import.meta.url), 'utf8')
   expect(html.match(/<style>\n([\s\S]*?)\n<\/style>/)[1]).toBe(css)
 })

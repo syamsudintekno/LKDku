@@ -220,7 +220,7 @@ function reportFolder(parent, name) {
 function createReportPdf(report) {
   var parent = DriveApp.getFolderById(report.profile.folder_pdf_id)
   var folder = reportFolder(reportFolder(parent, 'LKB'), report.month.slice(0, 4))
-  var template = HtmlService.createTemplateFromFile('report')
+  var template = HtmlService.createTemplateFromFile('reportTemplate')
   template.report = report
   template.formatTableDate = formatTableDate
   template.formatSignatureDate = formatSignatureDate

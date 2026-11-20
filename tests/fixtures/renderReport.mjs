@@ -4,7 +4,10 @@ import { runInNewContext } from 'node:vm'
 // Test-only approximation of Apps Script scriptlets. Dynamic data is always escaped;
 // only the checked-in template supplies executable code, never user content.
 export function renderReportTemplate(data) {
-  const template = readFileSync(new URL('../../apps-script/report.html', import.meta.url), 'utf8')
+  const template = readFileSync(
+    new URL('../../apps-script/reportTemplate.html', import.meta.url),
+    'utf8',
+  )
   const escape = (value) =>
     String(value ?? '').replace(
       /[&<>"']/g,

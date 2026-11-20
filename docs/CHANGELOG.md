@@ -4,6 +4,11 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-21 — Kompatibilitas unggah Apps Script
+
+- Template PDF diganti menjadi `reportTemplate.html` beserta pemanggil dan fixture, karena Apps Script menolak nama dasar yang sama pada `report.gs` dan `report.html`. Isi dan format PDF tidak berubah. Pemeriksaan nama berkas unik ditambahkan untuk mencegah kegagalan unggah berulang.
+- Backend 25 berkas diunggah ke proyek Apps Script uji yang ditunjuk pemilik, lalu dibaca ulang dan dibandingkan dengan sumber lokal (normalisasi akhir baris dan JSON). Seluruh berkas cocok. ID tujuan hanya di konfigurasi lokal yang diabaikan Git. Inisialisasi, akun, deploy dan penerimaan live masih menunggu pemilik.
+
 ## [Unreleased] - 2026-11-20 — Implementasi M4
 
 - Dashboard ringkasan bulanan, hari ini, peringatan, capaian tahunan/bulanan dengan satuan sesuai target dan rincian satuan lain. Domain dan port Apps Script memakai fixture bersama. Perayaan hanya setelah mutasi tersimpan melewati ambang terverifikasi.

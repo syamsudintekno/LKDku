@@ -104,7 +104,7 @@ export const createServer = () => {
     },
     HtmlService: {
       createTemplateFromFile: (name) => {
-        if (name !== 'report') throw Error('Unexpected template')
+        if (name !== 'reportTemplate') throw Error('Unexpected template')
         const template = {
           evaluate() {
             const html = renderReportTemplate(this)

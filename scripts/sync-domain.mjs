@@ -23,7 +23,7 @@ const reportStyles = readFileSync(
   new URL('../src/views/laporan/report.css', import.meta.url),
   'utf8',
 )
-const reportTemplate = new URL('../apps-script/report.html', import.meta.url)
+const reportTemplate = new URL('../apps-script/reportTemplate.html', import.meta.url)
 writeFileSync(
   reportTemplate,
   readFileSync(reportTemplate, 'utf8').replace(
