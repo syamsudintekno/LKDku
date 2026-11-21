@@ -21,6 +21,7 @@
 
 import React from 'react'
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
+import MobileNav from '../components/MobileNav'
 
 /**
  * DefaultLayout functional component
@@ -45,6 +46,7 @@ const DefaultLayout = () => {
           <AppContent />
         </div>
         <AppFooter />
+        <MobileNav />
       </div>
     </div>
   )

@@ -74,3 +74,35 @@ function parseIsoDate(str) {
   }
   return new Date(str)
 }
+
+export function currentJakartaYear() {
+  return Number(
+    new Intl.DateTimeFormat('en', { timeZone: 'Asia/Jakarta', year: 'numeric' }).format(new Date()),
+  )
+}
+export function formatDateTimeId(value) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return (
+    new Intl.DateTimeFormat('id-ID', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: 'Asia/Jakarta',
+    }).format(date) + ' WIB'
+  )
+}
+
+export function currentJakartaDate() {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat('en', {
+      timeZone: 'Asia/Jakarta',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+      .formatToParts(new Date())
+      .filter((part) => part.type !== 'literal')
+      .map((part) => [part.type, part.value]),
+  )
+  return `${parts.year}-${parts.month}-${parts.day}`
+}

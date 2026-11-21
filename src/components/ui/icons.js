@@ -18,6 +18,7 @@ import {
   cilChevronRight,
   cilReload,
   cilFolder,
+  cilSave,
 } from '@coreui/icons'
 
 export const APP_ICONS = {
@@ -40,4 +41,5 @@ export const APP_ICONS = {
   panah: cilChevronRight,
   ulang: cilReload,
   folder: cilFolder,
+  simpan: cilSave,
 }

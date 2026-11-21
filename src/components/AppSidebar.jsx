@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CCloseButton,
@@ -16,18 +16,29 @@ import navigation from '../_nav'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
+  const sidebarRef = useRef(null)
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   return (
     <CSidebar
+      ref={sidebarRef}
       className="border-end"
       colorScheme="dark"
       position="fixed"
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch({ type: 'set', sidebarShow: visible })
+        // Viewport measurements during resize/transition are observations, not
+        // requests to open the controlled sidebar. Only synchronize mobile close.
+        if (
+          !visible &&
+          sidebarShow &&
+          sidebarRef.current &&
+          getComputedStyle(sidebarRef.current).getPropertyValue('--cui-is-mobile')
+        ) {
+          dispatch({ type: 'set', sidebarShow: false })
+        }
       }}
     >
       <CSidebarHeader className="border-bottom">
@@ -43,6 +54,7 @@ const AppSidebar = () => {
         <CCloseButton
           className="d-lg-none"
           dark
+          aria-label="Tutup navigasi"
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
