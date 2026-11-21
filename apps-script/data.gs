@@ -47,7 +47,7 @@ function getSheetRecords(sheetName, includeDeleted) {
     var row = values[i]
     var obj = { _rowIndex: i + 1 }
     for (var h = 0; h < headers.length; h++) {
-      obj[headers[h]] = row[h]
+      obj[headers[h]] = normalizeSheetCell(headers[h], row[h])
     }
     // Hanya ambil data yang belum dihapus (deleted == 0 atau kosong)
     if (includeDeleted || obj.deleted != 1) {
@@ -56,6 +56,39 @@ function getSheetRecords(sheetName, includeDeleted) {
   }
 
   return records
+}
+
+function isCalendarColumn(header) {
+  return ['tanggal', 'tgl_mulai', 'tgl_akhir', 'tanggal_ttd'].indexOf(header) >= 0
+}
+function isTimeColumn(header) {
+  return ['jam_mulai', 'jam_selesai'].indexOf(header) >= 0
+}
+function normalizeSheetCell(header, value) {
+  if (Object.prototype.toString.call(value) !== '[object Date]') return value
+  // Read existing automatic date cells in their spreadsheet timezone, preserving the visible day.
+  if (isCalendarColumn(header) || isTimeColumn(header))
+    return Utilities.formatDate(
+      value,
+      getDbSpreadsheet().getSpreadsheetTimeZone(),
+      isCalendarColumn(header) ? 'yyyy-MM-dd' : 'HH:mm',
+    )
+  return value.toISOString()
+}
+function writeSheetRows(sheet, headers, startRow, rows) {
+  if (!rows.length) return
+  // Plain text prevents Sheets from coercing ISO dates and HH:mm strings back to Date objects.
+  headers.forEach(function (header, index) {
+    if (isCalendarColumn(header) || isTimeColumn(header))
+      sheet.getRange(startRow, index + 1, rows.length, 1).setNumberFormat('@')
+  })
+  sheet.getRange(startRow, 1, rows.length, headers.length).setValues(
+    rows.map(function (row) {
+      return headers.map(function (header, index) {
+        return normalizeSheetCell(header, row[index])
+      })
+    }),
+  )
 }
 
 /**
@@ -76,7 +109,7 @@ function appendSheetRecord(sheetName, record) {
     row.push(record[col] !== undefined ? record[col] : '')
   }
 
-  sheet.getRange(sheet.getLastRow() + 1, 1, 1, headers.length).setValues([row])
+  writeSheetRows(sheet, headers, sheet.getLastRow() + 1, [row])
   return record
 }
 
@@ -118,7 +151,7 @@ function updateSheetRecord(sheetName, id, updateObj) {
     }
   }
 
-  sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowValues])
+  writeSheetRows(sheet, headers, rowIndex, [rowValues])
   return updateObj
 }
 

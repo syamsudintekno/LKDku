@@ -4,6 +4,13 @@ Semua perubahan penting pada struktur database, arsitektur, dan fitur aplikasi d
 
 ---
 
+## [Unreleased] - 2026-11-21 — Normalisasi tanggal Google Sheets
+
+- Uji live mengonfirmasi login pemilik, sesi setelah reload, serta pembacaan dashboard/SKP/Harian kosong. Menyimpan satu kegiatan insidental palsu berhasil, tetapi pembacaan setelah simpan gagal karena Sheets mengonversi tanggal ISO menjadi objek Date.
+- Pembacaan sekarang menormalisasi Date kalender/jam menurut zona waktu spreadsheet dan timestamp menjadi ISO. Semua jalur tulis data menetapkan kolom kalender/jam sebagai teks agar nilai ISO dan HH:mm tidak dikonversi otomatis; termasuk pemulihan dan kompensasinya. Header dan format PDF tidak berubah.
+- Tes regresi memakai Date hasil getValues dan memeriksa list, dashboard, cadangan, edit, serta format teks saat tulis. Kegiatan berlabel UJI LIVE masih berstatus rencana di spreadsheet uji; pengujian centang dan soft delete menunggu pemilik memperbarui deployment. MVP belum lulus seluruh penerimaan live.
+- Lint, 136 tes pada 28 berkas, build, dan pemeriksaan diff lokal lulus. Unggah perbaikan ke proyek eksternal menunggu persetujuan pemilik setelah auto-review menolak overwrite paksa; deployment belum diperbarui.
+
 ## [Unreleased] - 2026-11-21 — Kompatibilitas unggah Apps Script
 
 - Template PDF diganti menjadi `reportTemplate.html` beserta pemanggil dan fixture, karena Apps Script menolak nama dasar yang sama pada `report.gs` dan `report.html`. Isi dan format PDF tidak berubah. Pemeriksaan nama berkas unik ditambahkan untuk mencegah kegagalan unggah berulang.

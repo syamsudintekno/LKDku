@@ -71,8 +71,7 @@ function commitReference(name, changes) {
         }),
       )
   })
-  if (values.length > 1)
-    sheet.getRange(2, 1, values.length - 1, headers.length).setValues(values.slice(1))
+  if (values.length > 1) writeSheetRows(sheet, headers, 2, values.slice(1))
 }
 function saveReference(name, payload, fields, ctx, action) {
   var previous = payload.id ? referenceRecord(name, payload.id) : null

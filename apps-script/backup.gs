@@ -501,7 +501,10 @@ function handle_backup_import(payload, ctx) {
             old = state.tables[name],
             last = sheet.getLastRow()
           if (old.length)
-            sheet.getRange(2, 1, old.length, headers.length).setValues(
+            writeSheetRows(
+              sheet,
+              headers,
+              2,
               old.map(function (row) {
                 return headers.map(function (key) {
                   return row[key]

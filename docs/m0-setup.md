@@ -2,7 +2,7 @@
 
 ## Status
 
-Implementasi diuji dengan fixture palsu dan layanan Google simulasi. Uji login/logout terhadap Web App dan spreadsheet uji nyata belum dilakukan. Jangan menandai M0 selesai berdasarkan tes simulasi saja.
+Implementasi diuji dengan fixture palsu dan layanan Google simulasi. Pada 21 November 2026, login oleh pemilik dan verifikasi sesi setelah reload berhasil melalui Web App serta spreadsheet uji terpisah. Logout, penguncian, kedaluwarsa dan rincian penyimpanan token masih memerlukan penerimaan live; M0 belum dinyatakan tuntas.
 
 ## Konfigurasi lokal dan backend
 
@@ -17,8 +17,8 @@ Implementasi diuji dengan fixture palsu dan layanan Google simulasi. Uji login/l
 ## Uji penerimaan pada lingkungan uji pemilik
 
 - [ ] Username/password salah ditolak. Kegagalan kelima mengunci akun 15 menit, termasuk bila password berikutnya benar.
-- [ ] Login benar membuka Beranda tanpa data kegiatan rekaan atau profil pribadi bawaan.
-- [ ] Reload halaman memverifikasi sesi kembali lewat server.
+- [x] Login benar membuka Beranda tanpa data kegiatan rekaan atau profil pribadi bawaan (21 November 2026).
+- [x] Reload halaman memverifikasi sesi kembali lewat server (21 November 2026).
 - [ ] Tanpa “ingat saya”, token tersimpan hanya di `sessionStorage`; dengan persetujuan, token tersimpan di `localStorage` dan sesi server berumur 14 hari. Sesi biasa 12 jam.
 - [ ] Token kosong, salah, kedaluwarsa, dan sesi yang telah logout ditolak semua action privat. Uji dengan token milik akun uji saja; jangan mencatatnya di repositori, tangkapan layar, atau log.
 - [ ] Logout kembali ke login dan membersihkan cache data privat. Bila jaringan gagal, sesi lokal tetap dibersihkan; sesi server yang gagal dicabut masih berlaku sampai kedaluwarsa.

@@ -46,6 +46,7 @@ export const createServer = () => {
   const sheet = (name) => {
     const rows = []
     const instance = {
+      numberFormats: [],
       getDataRange: () => ({ getValues: () => rows.map((row) => [...row]) }),
       getLastRow: () => rows.length,
       getLastColumn: () => rows[0]?.length || 0,
@@ -56,6 +57,11 @@ export const createServer = () => {
       setFrozenRows: () => {},
       getRange: (row, col, height, width) => {
         const range = {
+          setNumberFormat: (format) => {
+            if (!locked) throw Error('Write without lock')
+            instance.numberFormats.push({ row, col, height, width, format })
+            return range
+          },
           clearContent: () => {
             if (!locked) throw Error('Write without lock')
             for (let r = 0; r < height; r++)
@@ -86,7 +92,11 @@ export const createServer = () => {
     sheets.set(name, instance)
     return instance
   }
-  const spreadsheet = { getSheetByName: (name) => sheets.get(name), insertSheet: sheet }
+  const spreadsheet = {
+    getSheetByName: (name) => sheets.get(name),
+    insertSheet: sheet,
+    getSpreadsheetTimeZone: () => 'Asia/Jakarta',
+  }
   const props = {
     getProperty: (key) => properties.get(key) || null,
     setProperty: (key, value) => properties.set(key, value),
@@ -152,8 +162,25 @@ export const createServer = () => {
             )
             .digest(),
         ),
-      formatDate: (date, zone, format) =>
-        format === 'yyyy' ? String(date.getUTCFullYear()) : date.toISOString(),
+      formatDate: (date, zone, format) => {
+        const parts = Object.fromEntries(
+          new Intl.DateTimeFormat('en-GB', {
+            timeZone: zone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hourCycle: 'h23',
+          })
+            .formatToParts(date)
+            .map(({ type, value }) => [type, value]),
+        )
+        if (format === 'yyyy') return parts.year
+        if (format === 'yyyy-MM-dd') return `${parts.year}-${parts.month}-${parts.day}`
+        if (format === 'HH:mm') return `${parts.hour}:${parts.minute}`
+        return date.toISOString()
+      },
     },
     ContentService: {
       MimeType: { JSON: 'json' },
